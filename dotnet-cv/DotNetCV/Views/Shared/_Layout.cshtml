@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DotNetCV</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DotNetCV.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">EB</div>
+            <h3>EDON BYTYQI</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#home" class="nav-item active">HOME</a>
+            <a href="#about" class="nav-item">ABOUT</a>
+            <a href="#experience" class="nav-item">EXPERIENCE</a>
+            <a href="#education" class="nav-item">EDUCATION</a>
+            <a href="#skills" class="nav-item">SKILLS</a>
+            <a href="#contact" class="nav-item">CONTACT</a>
+        </nav>
+        <div class="tech-switch">
+            <div class="switch-label">TECH STACK</div>
+            <a href="http://localhost:5000" class="tech-btn active">.NET</a>
+            <a href="http://localhost:4200" class="tech-btn">Angular</a>
+        </div>
+        <div class="sidebar-footer">
+            <div class="social-links">
+                <a href="#" class="social-icon">in</a>
+                <a href="#" class="social-icon">gh</a>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        @RenderBody()
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
