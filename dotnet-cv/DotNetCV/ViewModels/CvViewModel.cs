@@ -1,4 +1,6 @@
-namespace DotNetCV.Models;
+using DotNetCV.Models;
+
+namespace DotNetCV.ViewModels;
 
 public class CvViewModel
 {
@@ -7,4 +9,5 @@ public class CvViewModel
     public List<Education> Education { get; set; } = new();
     public List<SkillCategory> SkillCategories { get; set; } = new();
     public Contact Contact { get; set; } = new();
+    public SidebarViewModel Sidebar { get; set; } = new();
 }
