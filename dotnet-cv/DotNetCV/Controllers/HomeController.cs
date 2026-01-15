@@ -1,21 +1,25 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DotNetCV.Models;
+using DotNetCV.Services;
 
 namespace DotNetCV.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly ICvService _cvService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, ICvService cvService)
     {
         _logger = logger;
+        _cvService = cvService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var cvData = await _cvService.GetCompleteCvAsync();
+        return View(cvData);
     }
 
     public IActionResult Privacy()
