@@ -1,4 +1,5 @@
 using DotNetCV.Models;
+using DotNetCV.ViewModels;
 
 namespace DotNetCV.Services;
 
@@ -156,6 +157,36 @@ public class CvService : ICvService
         return Task.FromResult(contact);
     }
 
+    public Task<SidebarViewModel> GetSidebarAsync()
+    {
+        var sidebar = new SidebarViewModel
+        {
+            Name = "EDON BYTYQI",
+            ProfileImageUrl = "/assets/images/profile.jpg",
+            NavigationItems = new List<NavigationItem>
+            {
+                new NavigationItem { Label = "HOME", Href = "#home", IsActive = true },
+                new NavigationItem { Label = "ABOUT", Href = "#about", IsActive = false },
+                new NavigationItem { Label = "EXPERIENCE", Href = "#experience", IsActive = false },
+                new NavigationItem { Label = "EDUCATION", Href = "#education", IsActive = false },
+                new NavigationItem { Label = "SKILLS", Href = "#skills", IsActive = false },
+                new NavigationItem { Label = "CONTACT", Href = "#contact", IsActive = false }
+            },
+            TechStackItems = new List<TechStackItem>
+            {
+                new TechStackItem { Label = ".NET", Url = "http://localhost:5000", IsActive = true },
+                new TechStackItem { Label = "Angular", Url = "http://localhost:4202", IsActive = false }
+            },
+            SocialLinks = new List<SocialLink>
+            {
+                new SocialLink { Label = "LinkedIn", Url = "https://linkedin.com/in/edon-bytyqi", Icon = "in" },
+                new SocialLink { Label = "GitHub", Url = "https://github.com/EdonBytyqi", Icon = "gh" }
+            }
+        };
+
+        return Task.FromResult(sidebar);
+    }
+
     public async Task<CvViewModel> GetCompleteCvAsync()
     {
         var viewModel = new CvViewModel
@@ -164,7 +195,8 @@ public class CvService : ICvService
             Experiences = await GetExperiencesAsync(),
             Education = await GetEducationAsync(),
             SkillCategories = await GetSkillCategoriesAsync(),
-            Contact = await GetContactAsync()
+            Contact = await GetContactAsync(),
+            Sidebar = await GetSidebarAsync()
         };
 
         return viewModel;

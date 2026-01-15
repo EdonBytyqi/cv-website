@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DotNetCV.Models;
 using DotNetCV.Services;
+using DotNetCV.ViewModels;
 
 namespace DotNetCV.Controllers;
 
