@@ -1,22 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { CvService } from './services/cv.service';
-import { CvData } from './models/cv-data.model';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule],
+  imports: [CommonModule, DatePipe],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit {
-  cvData?: CvData;
+export class AppComponent {
+  private cvService = inject(CvService);
 
-  constructor(private cvService: CvService) {}
-
-  ngOnInit(): void {
-    this.cvService.getCompleteCv().subscribe(data => {
-      this.cvData = data;
-    });
-  }
+  // Expose the computed signal from the service
+  cvData = this.cvService.cvData;
 }
