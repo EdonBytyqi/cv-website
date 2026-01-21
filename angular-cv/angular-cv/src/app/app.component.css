@@ -4,6 +4,61 @@
   box-sizing: border-box;
 }
 
+/* Focus Management & Accessibility */
+:focus {
+  outline: 2px solid #dd0031;
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid #dd0031;
+  outline-offset: 2px;
+}
+
+/* Skip to content link for screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #dd0031;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .sidebar {
+    border-right: 2px solid #dd0031;
+  }
+
+  .nav-item,
+  .tech-btn,
+  .social-icon {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Sidebar Styles */
 .sidebar {
   position: fixed;
@@ -519,7 +574,7 @@
   border-radius: 10px;
 }
 
-.contact-info h4 {
+.contact-info h3 {
   font-size: 1rem;
   color: #dd0031;
   margin-bottom: 0.5rem;
@@ -530,6 +585,28 @@
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.6;
   margin: 0;
+}
+
+.contact-info a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+  color: #dd0031;
+  text-decoration: underline;
+}
+
+.contact-info a:focus-visible {
+  color: #dd0031;
+  text-decoration: underline;
+}
+
+/* SVG icon styling */
+.contact-icon svg {
+  color: #dd0031;
+  stroke: #dd0031;
 }
 
 /* Responsive Design */

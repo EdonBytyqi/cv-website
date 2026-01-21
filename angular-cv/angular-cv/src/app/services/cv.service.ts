@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, signal, computed } from '@angular/core';
 import { CvData } from '../models/cv-data.model';
 import { AboutMe } from '../models/about-me.model';
 import { Experience } from '../models/experience.model';
@@ -12,11 +11,25 @@ import { SidebarData } from '../models/sidebar.model';
   providedIn: 'root'
 })
 export class CvService {
+  private aboutMeSignal = signal<AboutMe>(this.createAboutMe());
+  private experiencesSignal = signal<Experience[]>(this.createExperiences());
+  private educationSignal = signal<Education[]>(this.createEducation());
+  private skillCategoriesSignal = signal<SkillCategory[]>(this.createSkillCategories());
+  private contactSignal = signal<Contact>(this.createContact());
+  private sidebarSignal = signal<SidebarData>(this.createSidebar());
 
-  constructor() { }
+  // Public computed signal for complete CV data
+  cvData = computed<CvData>(() => ({
+    aboutMe: this.aboutMeSignal(),
+    experiences: this.experiencesSignal(),
+    education: this.educationSignal(),
+    skillCategories: this.skillCategoriesSignal(),
+    contact: this.contactSignal(),
+    sidebar: this.sidebarSignal()
+  }));
 
-  getAboutMe(): Observable<AboutMe> {
-    const aboutMe: AboutMe = {
+  private createAboutMe(): AboutMe {
+    return {
       id: 1,
       fullName: 'Edon Bytyqi',
       title: 'Software Developer',
@@ -25,11 +38,10 @@ export class CvService {
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    return of(aboutMe);
   }
 
-  getExperiences(): Observable<Experience[]> {
-    const experiences: Experience[] = [
+  private createExperiences(): Experience[] {
+    return [
       {
         id: 1,
         jobTitle: 'Software Developer - SAP',
@@ -63,11 +75,10 @@ export class CvService {
         sortOrder: 2
       }
     ];
-    return of(experiences);
   }
 
-  getEducation(): Observable<Education[]> {
-    const education: Education[] = [
+  private createEducation(): Education[] {
+    return [
       {
         id: 1,
         degree: 'M-Files Solution Course',
@@ -98,11 +109,10 @@ export class CvService {
         sortOrder: 3
       }
     ];
-    return of(education);
   }
 
-  getSkillCategories(): Observable<SkillCategory[]> {
-    const skillCategories: SkillCategory[] = [
+  private createSkillCategories(): SkillCategory[] {
+    return [
       {
         categoryName: 'ERP & Banking Systems',
         skills: [
@@ -143,11 +153,10 @@ export class CvService {
         ]
       }
     ];
-    return of(skillCategories);
   }
 
-  getContact(): Observable<Contact> {
-    const contact: Contact = {
+  private createContact(): Contact {
+    return {
       id: 1,
       email: 'edonbytyqi@outlook.com',
       phone: '+41 XX XXX XX XX',
@@ -157,11 +166,10 @@ export class CvService {
       gitHubUrl: 'https://github.com/EdonBytyqi',
       websiteUrl: 'https://edonbytyqi.com'
     };
-    return of(contact);
   }
 
-  getSidebar(): Observable<SidebarData> {
-    const sidebar: SidebarData = {
+  private createSidebar(): SidebarData {
+    return {
       name: 'EDON BYTYQI',
       profileImageUrl: '/assets/images/profile.jpg',
       navigationItems: [
@@ -181,61 +189,5 @@ export class CvService {
         { label: 'GitHub', url: 'https://github.com/EdonBytyqi', icon: 'gh' }
       ]
     };
-    return of(sidebar);
-  }
-
-  getCompleteCv(): Observable<CvData> {
-    // In a real app, you'd use forkJoin to combine these observables
-    // For now, we'll combine them synchronously
-    const cvData: CvData = {
-      aboutMe: {
-        id: 1,
-        fullName: 'Edon Bytyqi',
-        title: 'Software Developer',
-        bio: 'Experienced software developer specializing in Avaloq, SAP, and .NET development. Passionate about creating efficient and scalable solutions.',
-        profileImageUrl: '/assets/images/profile.jpg',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      experiences: [],
-      education: [],
-      skillCategories: [],
-      contact: {
-        id: 1,
-        email: 'edonbytyqi@outlook.com',
-        phone: '+41 XX XXX XX XX',
-        location: 'Lugano, Switzerland',
-        linkedInUrl: 'https://linkedin.com/in/edon-bytyqi',
-        gitHubUrl: 'https://github.com/EdonBytyqi',
-        websiteUrl: 'https://edonbytyqi.com'
-      },
-      sidebar: {
-        name: 'EDON BYTYQI',
-        profileImageUrl: '/assets/images/profile.jpg',
-        navigationItems: [
-          { label: 'HOME', href: '#home', isActive: true },
-          { label: 'ABOUT', href: '#about', isActive: false },
-          { label: 'EXPERIENCE', href: '#experience', isActive: false },
-          { label: 'EDUCATION', href: '#education', isActive: false },
-          { label: 'SKILLS', href: '#skills', isActive: false },
-          { label: 'CONTACT', href: '#contact', isActive: false }
-        ],
-        techStackItems: [
-          { label: '.NET', url: 'http://localhost:5000', isActive: false },
-          { label: 'Angular', url: 'http://localhost:4202', isActive: true }
-        ],
-        socialLinks: [
-          { label: 'LinkedIn', url: 'https://linkedin.com/in/edon-bytyqi', icon: 'in' },
-          { label: 'GitHub', url: 'https://github.com/EdonBytyqi', icon: 'gh' }
-        ]
-      }
-    };
-
-    // Populate the rest using the other methods
-    this.getExperiences().subscribe(exp => cvData.experiences = exp);
-    this.getEducation().subscribe(edu => cvData.education = edu);
-    this.getSkillCategories().subscribe(skills => cvData.skillCategories = skills);
-
-    return of(cvData);
   }
 }
