@@ -1,6 +1,6 @@
 # CV Website - Dual Tech Stack
 
-A modern, professional CV website built with two separate tech stacks: **C# .NET** and **Angular**. Features a sleek dark theme with sidebar navigation and smooth animations. Switch between implementations using the tech stack buttons in the sidebar.
+A modern, professional CV website built with two separate tech stacks: **C# .NET** and **Angular**. The two implementations are independent; the Angular version is the primary, redesigned site.
 
 ## Project Structure
 
@@ -12,7 +12,7 @@ cv-website/
 │       │   ├── css/
 │       │   └── images/  # Place profile.jpg here
 │       └── Views/
-└── angular-cv/         # Angular implementation (Red theme)
+└── angular-cv/         # Angular implementation (primary site)
     └── angular-cv/
         └── src/
             ├── app/
@@ -55,65 +55,34 @@ cv-website/
 
 ## Features
 
-### Design
-- Modern dark theme with sleek animations
-- Fixed sidebar navigation with smooth scrolling
-- Full-height hero section with profile display
-- Tech-specific color schemes:
-  - .NET: Purple/Violet gradients (#667eea, #764ba2)
-  - Angular: Red gradients (#dd0031, #c3002f)
-- Animated background effects and hover states
-- Fully responsive design
+### Angular version
+- Editorial two-column layout: sticky intro and section nav on desktop, single column with a sticky nav strip on phones
+- Light and dark themes that follow the system setting, built on CSS tokens in `src/styles.css`
+- Active-section highlighting in the nav while scrolling
+- Restrained motion: a short staggered entrance on load, press feedback, hover effects only on precise pointers, and a gentler variant for `prefers-reduced-motion`
+- Mobile polish: safe-area insets, per-scheme `theme-color`, no tap highlight or tap delay
+- Print stylesheet for a clean one-column paper CV
+- "Copy email" button with confirmation
 
-### Navigation
-- Fixed sidebar with section links
-- Tech stack switcher in sidebar
-- Smooth scroll to sections
-- Social media links (customizable)
-
-### Content Sections
-- Hero section with profile circle
-- About Me
-- Experience (Timeline layout)
-- Education & Certifications (Card grid)
-- Technical Skills (Category grid)
-- Contact Information (Card grid)
+### .NET version
+- Dark purple theme with fixed sidebar navigation and a full-height hero
 
 ## Customization
 
-### Adding Your Profile Picture
+### Updating your information
 
-1. Save your profile picture as `profile.jpg`
-2. Place it in:
-   - **.NET**: `dotnet-cv/DotNetCV/wwwroot/images/profile.jpg`
-   - **Angular**: `angular-cv/angular-cv/src/assets/images/profile.jpg`
-3. Update the CSS to use the image instead of initials:
-   ```css
-   .profile-circle {
-     background-image: url('/images/profile.jpg'); /* .NET */
-     /* or */
-     background-image: url('assets/images/profile.jpg'); /* Angular */
-   }
-   .logo {
-     background-image: url('/images/profile.jpg'); /* Same for sidebar logo */
-   }
-   ```
+- **Angular**: edit the data in `angular-cv/angular-cv/src/app/services/cv.service.ts`. The phone number is optional and only shown when set; keep personal numbers out of the public repo.
+- **.NET**: edit `dotnet-cv/DotNetCV/Services/CvService.cs` and the views in `dotnet-cv/DotNetCV/Views/Home/`.
 
-### Updating Your Information
+### Profile picture
 
-1. Edit content in:
-   - **.NET**: `dotnet-cv/DotNetCV/Views/Home/Index.cshtml`
-   - **Angular**: `angular-cv/angular-cv/src/app/app.component.html`
+- **Angular**: `angular-cv/angular-cv/src/assets/images/profile.jpg`
+- **.NET**: `dotnet-cv/DotNetCV/wwwroot/images/profile.jpg`
 
-2. Modify styling:
-   - **.NET**: `dotnet-cv/DotNetCV/wwwroot/css/site.css`
-   - **Angular**: `angular-cv/angular-cv/src/app/app.component.css`
+### Styling
 
-### Customizing Social Links
-
-Update the social links in the sidebar footer:
-- LinkedIn: Replace `#` with your LinkedIn profile URL
-- GitHub: Replace `#` with your GitHub profile URL
+- **Angular**: tokens (colors, easing, durations) in `src/styles.css`, layout in `src/app/app.component.css`
+- **.NET**: `dotnet-cv/DotNetCV/wwwroot/css/site.css`
 
 ## Tech Stack
 

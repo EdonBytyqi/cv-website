@@ -159,9 +159,7 @@ export class CvService {
     return {
       id: 1,
       email: 'edonbytyqi@outlook.com',
-      phone: '+41 XX XXX XX XX',
-      location: '6020 Emmenbrücke, Switzerland',
-      fullAddress: '6020 Emmenbrücke, Switzerland',
+      location: 'Emmenbrücke, Switzerland',
       linkedInUrl: 'https://linkedin.com/in/edon-bytyqi',
       gitHubUrl: 'https://github.com/EdonBytyqi',
       websiteUrl: 'https://edonbytyqi.com'
@@ -170,23 +168,18 @@ export class CvService {
 
   private createSidebar(): SidebarData {
     return {
-      name: 'EDON BYTYQI',
+      name: 'Edon Bytyqi',
       profileImageUrl: '/assets/images/profile.jpg',
       navigationItems: [
-        { label: 'HOME', href: '#home', isActive: true },
-        { label: 'ABOUT', href: '#about', isActive: false },
-        { label: 'EXPERIENCE', href: '#experience', isActive: false },
-        { label: 'EDUCATION', href: '#education', isActive: false },
-        { label: 'SKILLS', href: '#skills', isActive: false },
-        { label: 'CONTACT', href: '#contact', isActive: false }
-      ],
-      techStackItems: [
-        { label: '.NET', url: 'http://localhost:5000', isActive: false },
-        { label: 'Angular', url: 'http://localhost:4202', isActive: true }
+        { label: 'About', sectionId: 'about' },
+        { label: 'Experience', sectionId: 'experience' },
+        { label: 'Education', sectionId: 'education' },
+        { label: 'Skills', sectionId: 'skills' },
+        { label: 'Contact', sectionId: 'contact' }
       ],
       socialLinks: [
-        { label: 'LinkedIn', url: 'https://linkedin.com/in/edon-bytyqi', icon: 'in' },
-        { label: 'GitHub', url: 'https://github.com/EdonBytyqi', icon: 'gh' }
+        { label: 'LinkedIn', url: 'https://linkedin.com/in/edon-bytyqi' },
+        { label: 'GitHub', url: 'https://github.com/EdonBytyqi' }
       ]
     };
   }
