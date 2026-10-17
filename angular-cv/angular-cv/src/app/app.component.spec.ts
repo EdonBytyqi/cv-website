@@ -34,10 +34,9 @@ describe('AppComponent', () => {
     }
   });
 
-  it('marks the first section as current initially', () => {
-    const current = compiled.querySelectorAll('.toc-link[aria-current="true"]');
-    expect(current.length).toBe(1);
-    expect(current[0].getAttribute('href')).toBe('#about');
+  it('highlights no nav item while the hero is in view', () => {
+    expect(component.activeSection()).toBe('top');
+    expect(compiled.querySelectorAll('.toc-link[aria-current="true"]').length).toBe(0);
   });
 
   it('does not render a phone link when no phone number is set', () => {

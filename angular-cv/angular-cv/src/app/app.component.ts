@@ -47,7 +47,8 @@ export class AppComponent {
   private introFallbackTimer?: ReturnType<typeof setTimeout>;
 
   cvData = this.cvService.cvData;
-  activeSection = signal(this.cvData().sidebar.navigationItems[0].sectionId);
+  /** Starts on the hero, which has no nav item, so nothing is highlighted until you scroll. */
+  activeSection = signal('top');
   emailCopied = signal(false);
   introActive = signal(shouldPlayIntro());
   /** Whether the page entrance may play; held back while the welcome is fully covering it. */

@@ -57,8 +57,8 @@ cv-website/
 
 ### Angular version
 - Welcome animation: a hand-drawn "hello" writes itself on first visit, then dissolves into the page. Plays once per browser session, can be skipped with a click or any key, and is skipped entirely for `prefers-reduced-motion`
-- Apple.com-inspired look: white and `#f5f5f7` tiles, `#1d1d1f` text, blue pill buttons, orange "Current" label, pure black in dark mode; SF on Apple devices, Inter elsewhere
-- Editorial two-column layout: sticky intro and section nav on desktop, single column with a sticky translucent nav strip on phones
+- Apple.com-inspired look: `#f5f5f7` and white bands with contrasting cards, `#1d1d1f` text, blue pill buttons, orange "Current" label, pure black in dark mode; SF on Apple devices, Inter elsewhere
+- apple.com layout: a 44px translucent global nav (name left, section links centred, LinkedIn / GitHub / Email icons right), a centred hero with two pill buttons, and full-width bands alternating gray and white
 - Light and dark themes that follow the system setting, built on CSS tokens in `src/styles.css`
 - Motion details: press feedback on buttons, tooltips that delay the first time and open instantly after that, a blurred crossfade on the Copy → Copied button, active-section indicator, staggered page entrance
 - Mobile polish: safe-area insets, per-scheme `theme-color`, no tap highlight or tap delay
