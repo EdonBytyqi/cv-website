@@ -3,45 +3,56 @@
 :root {
   color-scheme: light dark;
 
-  --bg: #fafaf9;
-  --surface: #ffffff;
-  --surface-hover: #f4f4f2;
-  --text: #18181b;
-  --text-muted: #52525b;
-  --text-subtle: #6b6b74;
-  --border: #e6e5e1;
-  --accent: #c3002f;
-  --accent-soft: rgba(195, 0, 47, 0.08);
+  /* Apple.com palette */
+  --bg: #ffffff;
+  --tile: #f5f5f7;
+  --tile-hover: #e8e8ed;
+  --text: #1d1d1f;
+  --text-muted: #6e6e73;
+  --text-subtle: #6e6e73; /* #86868b fails AA on white */
+  --border: #d2d2d7;
+  --link: #0066cc;
+  --accent: #0071e3;
+  --accent-hover: #0077ed;
   --accent-contrast: #ffffff;
-  --nav-bg: rgba(250, 250, 249, 0.85);
+  --highlight: #b64400; /* Apple's orange "New" label */
+  --tooltip-bg: #1d1d1f;
+  --tooltip-text: #f5f5f7;
+  --nav-bg: rgba(251, 251, 253, 0.8);
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-pill: 999px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 980px;
 
   /* Motion: strong custom curves; built-in keywords are too weak. */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --duration-press: 160ms;
+  --duration-tooltip: 125ms;
   --duration-fast: 150ms;
   --duration-ui: 200ms;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0c0c0d;
-    --surface: #151517;
-    --surface-hover: #1c1c1f;
-    --text: #f4f4f5;
-    --text-muted: #a1a1aa;
-    --text-subtle: #8b8b94;
-    --border: #27272a;
-    --accent: #ff5c7a;
-    --accent-soft: rgba(255, 92, 122, 0.12);
-    --accent-contrast: #1a0006;
-    --nav-bg: rgba(12, 12, 13, 0.82);
+    --bg: #000000;
+    --tile: #161617;
+    --tile-hover: #232325;
+    --text: #f5f5f7;
+    --text-muted: #a1a1a6;
+    --text-subtle: #86868b;
+    --border: #424245;
+    --link: #2997ff;
+    --accent: #0071e3;
+    --accent-hover: #0077ed;
+    --accent-contrast: #ffffff;
+    --highlight: #f56300;
+    --tooltip-bg: #f5f5f7;
+    --tooltip-text: #1d1d1f;
+    --nav-bg: rgba(22, 22, 23, 0.8);
   }
 }
 
@@ -66,6 +77,7 @@ body {
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.6;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -120,7 +132,7 @@ button,
 }
 
 ::selection {
-  background: var(--accent-soft);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
   color: var(--text);
 }
 
@@ -147,13 +159,13 @@ button,
 @media print {
   :root {
     --bg: #ffffff;
-    --surface: #ffffff;
     --text: #000000;
     --text-muted: #333333;
     --text-subtle: #555555;
     --border: #cccccc;
     --accent: #000000;
-    --accent-soft: transparent;
+    --link: #000000;
+    --tile: #ffffff;
   }
 
   body {

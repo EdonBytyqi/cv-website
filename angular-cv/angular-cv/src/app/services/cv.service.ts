@@ -178,8 +178,8 @@ export class CvService {
         { label: 'Contact', sectionId: 'contact' }
       ],
       socialLinks: [
-        { label: 'LinkedIn', url: 'https://linkedin.com/in/edon-bytyqi' },
-        { label: 'GitHub', url: 'https://github.com/EdonBytyqi' }
+        { label: 'LinkedIn', url: 'https://linkedin.com/in/edon-bytyqi', icon: 'linkedin' },
+        { label: 'GitHub', url: 'https://github.com/EdonBytyqi', icon: 'github' }
       ]
     };
   }

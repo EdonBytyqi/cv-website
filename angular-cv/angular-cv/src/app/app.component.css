@@ -1,3 +1,54 @@
+/* ---------- Welcome "hello" (once per session, skipped for reduced motion) ---------- */
+
+.hello {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  cursor: pointer;
+  animation: hello-out 600ms var(--ease-out) 2700ms forwards;
+}
+
+.hello-mark {
+  width: min(72vw, 560px);
+  height: auto;
+  overflow: visible;
+  animation: hello-mark-out 600ms var(--ease-out) 2700ms forwards;
+}
+
+/* pathLength="1" lets one dash cover the whole stroke, so offset 1 → 0 writes it out. */
+.hello-path {
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: hello-draw 2200ms var(--ease-in-out) 250ms forwards;
+}
+
+@keyframes hello-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Exit is faster than the entrance, and dissolves rather than snapping: fade, slight lift, blur. */
+@keyframes hello-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes hello-mark-out {
+  to {
+    transform: scale(1.04);
+    filter: blur(6px);
+  }
+}
+
 /* ---------- Layout ---------- */
 
 .layout {
@@ -23,7 +74,7 @@
 @media (min-width: 900px) {
   .layout {
     grid-template-columns: 260px minmax(0, 1fr);
-    column-gap: 80px;
+    column-gap: 72px;
     padding-top: 80px;
     padding-inline: 40px;
   }
@@ -58,43 +109,98 @@
 /* ---------- Intro ---------- */
 
 .avatar {
-  width: 72px;
-  height: 72px;
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 20px;
-  box-shadow: 0 0 0 1px var(--border);
 }
 
 .name {
-  font-size: 1.75rem;
-  line-height: 1.2;
-  font-weight: 650;
-  letter-spacing: -0.02em;
+  font-size: 2.25rem;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
 .role {
-  margin-top: 4px;
-  font-size: 1.0625rem;
+  margin-top: 6px;
+  font-size: 1.25rem;
+  line-height: 1.3;
   color: var(--text-muted);
+  letter-spacing: -0.015em;
 }
 
 .place {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 12px;
+  margin-top: 14px;
   font-size: 0.875rem;
   color: var(--text-subtle);
 }
 
 .social {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 18px;
-  margin-top: 16px;
-  font-size: 0.875rem;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.tip-anchor {
+  position: relative;
+}
+
+.icon-link {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--tile);
+  color: var(--text-muted);
+  transition:
+    transform var(--duration-press) var(--ease-out),
+    background-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
+}
+
+/* Small targets need a touch more travel than buttons to read as pressed. */
+.icon-link:active {
+  transform: scale(0.95);
+}
+
+/* Tooltip sits above its trigger and grows from its bottom edge, toward the trigger. */
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  z-index: 20;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-text);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) scale(0.97);
+  transform-origin: 50% 100%;
+  transition:
+    transform var(--duration-tooltip) var(--ease-out),
+    opacity var(--duration-tooltip) var(--ease-out);
+}
+
+.tooltip[data-open] {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* Once one tooltip has been shown, neighbours open and close with no animation. */
+.tooltip[data-instant] {
+  transition-duration: 0ms;
 }
 
 /* ---------- Section nav ---------- */
@@ -106,9 +212,9 @@
   margin: 24px calc(var(--gutter-end) * -1) 0 calc(var(--gutter) * -1);
   padding: env(safe-area-inset-top, 0px) var(--gutter-end) 0 var(--gutter);
   background: var(--nav-bg);
-  backdrop-filter: saturate(180%) blur(12px);
-  -webkit-backdrop-filter: saturate(180%) blur(12px);
-  border-bottom: 1px solid var(--border);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
 }
 
 .toc ul {
@@ -126,7 +232,7 @@
 
 .toc-link {
   display: block;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: var(--radius-pill);
   font-size: 0.875rem;
   font-weight: 500;
@@ -140,7 +246,7 @@
 
 .toc-link.active {
   color: var(--text);
-  background: var(--surface-hover);
+  background: var(--tile);
 }
 
 @media (min-width: 900px) {
@@ -199,7 +305,6 @@
 
 .section {
   padding: 48px 0;
-  border-bottom: 1px solid var(--border);
   scroll-margin-top: 56px;
 }
 
@@ -209,6 +314,7 @@
 
 @media (min-width: 900px) {
   .section {
+    padding: 56px 0;
     scroll-margin-top: 80px;
   }
 
@@ -219,37 +325,41 @@
 
 .section-title {
   margin-bottom: 24px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-subtle);
+  font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
 }
 
 .lede {
-  max-width: 62ch;
-  font-size: 1.125rem;
-  line-height: 1.65;
-  color: var(--text);
+  max-width: 34em;
+  font-size: 1.3125rem;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  color: var(--text-muted);
   text-wrap: pretty;
 }
 
-/* ---------- Entries (experience, education) ---------- */
+/* ---------- Entries (experience, education) as tiles ---------- */
 
 .entries {
   display: grid;
-  gap: 36px;
+  gap: 16px;
 }
 
 .entry {
   display: grid;
   gap: 6px;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  background: var(--tile);
 }
 
 @media (min-width: 640px) {
   .entry {
-    grid-template-columns: 9.5rem minmax(0, 1fr);
+    grid-template-columns: 9rem minmax(0, 1fr);
     column-gap: 24px;
+    padding: 28px 32px;
   }
 }
 
@@ -264,16 +374,17 @@
 .entry-title {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 10px;
-  font-size: 1.0625rem;
+  align-items: baseline;
+  gap: 2px 10px;
+  font-size: 1.1875rem;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
 .entry-meta {
-  margin-top: 2px;
+  margin-top: 4px;
   font-size: 0.9375rem;
   color: var(--text-muted);
 }
@@ -281,9 +392,9 @@
 .entry-points {
   display: grid;
   gap: 6px;
-  margin-top: 12px;
+  margin-top: 14px;
   max-width: 62ch;
-  color: var(--text-muted);
+  color: var(--text);
 }
 
 .entry-points li {
@@ -294,10 +405,11 @@
 .entry-points li::before {
   content: '';
   position: absolute;
-  left: 2px;
-  top: 0.75em;
-  width: 5px;
-  height: 1px;
+  left: 3px;
+  top: 0.7em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
   background: var(--text-subtle);
 }
 
@@ -305,26 +417,24 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .entry-facts span {
-  padding: 2px 8px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--bg);
   font-size: 0.8125rem;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
 }
 
+/* Apple's orange "New" label. */
 .pill {
-  padding: 1px 8px;
-  border-radius: var(--radius-pill);
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  color: var(--highlight);
+  letter-spacing: 0;
 }
 
 /* ---------- Skills ---------- */
@@ -341,16 +451,16 @@
 
 @media (min-width: 640px) {
   .skill-row {
-    grid-template-columns: 9.5rem minmax(0, 1fr);
+    grid-template-columns: 9rem minmax(0, 1fr);
     column-gap: 24px;
   }
 }
 
 .skill-row dt {
-  padding-top: 4px;
+  padding-top: 6px;
   font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-muted);
+  font-weight: 600;
+  color: var(--text);
 }
 
 .tags {
@@ -360,12 +470,11 @@
 }
 
 .tag {
-  padding: 4px 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--tile);
   font-size: 0.875rem;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 /* ---------- Contact ---------- */
@@ -373,27 +482,29 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 24px;
+  gap: 12px;
+  margin-top: 28px;
 }
 
 .button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   min-height: 44px;
-  padding: 0 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  font-size: 0.9375rem;
-  font-weight: 500;
+  padding: 0 22px;
+  border: 1px solid var(--link);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--link);
+  font-size: 1rem;
+  font-weight: 400;
   text-decoration: none;
   overflow-wrap: anywhere;
   transition:
     transform var(--duration-press) var(--ease-out),
     background-color var(--duration-fast) ease,
-    border-color var(--duration-fast) ease;
+    color var(--duration-fast) ease;
 }
 
 .button:active {
@@ -406,22 +517,42 @@
   color: var(--accent-contrast);
 }
 
+/* Copy → Copied: both labels share one grid cell, so the button keeps the width of the wider one. */
+.swap {
+  display: inline-grid;
+}
+
+.swap-label {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    opacity var(--duration-ui) ease,
+    filter var(--duration-ui) ease,
+    transform var(--duration-ui) var(--ease-out);
+}
+
+.swap[data-state='idle'] [data-label='copied'],
+.swap[data-state='copied'] [data-label='idle'] {
+  opacity: 0;
+  filter: blur(2px);
+  transform: scale(0.95);
+}
+
 /* ---------- Links & footer ---------- */
 
 .text-link {
-  color: var(--text-muted);
-  text-decoration: underline;
-  text-decoration-color: var(--border);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  transition:
-    color var(--duration-fast) ease,
-    text-decoration-color var(--duration-fast) ease;
+  color: var(--link);
+  text-decoration: none;
 }
 
 .footer {
-  padding: 32px 0 calc(40px + env(safe-area-inset-bottom, 0px));
-  font-size: 0.8125rem;
+  margin-top: 24px;
+  padding: 24px 0 calc(40px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
   color: var(--text-subtle);
 }
 
@@ -432,24 +563,33 @@
   }
 
   .text-link:hover {
+    text-decoration: underline;
+  }
+
+  .icon-link:hover {
+    background: var(--tile-hover);
     color: var(--text);
-    text-decoration-color: currentColor;
   }
 
   .button:hover {
-    background: var(--surface-hover);
+    background: color-mix(in srgb, var(--link) 8%, transparent);
   }
 
   .button.primary:hover {
-    background: color-mix(in srgb, var(--accent) 88%, var(--text));
+    background: var(--accent-hover);
   }
 }
 
-/* ---------- Page-load entrance (seen once per visit) ---------- */
+/* ---------- Page-load entrance ---------- */
 
 .enter {
   animation: enter 420ms var(--ease-out) both;
   animation-delay: calc(var(--i, 0) * 50ms);
+}
+
+/* Held on the first frame (hidden) until the welcome starts to leave. */
+.layout:not(.ready) .enter {
+  animation-play-state: paused;
 }
 
 @keyframes enter {
@@ -466,11 +606,13 @@
     animation-delay: 0ms;
   }
 
-  .toc-link::before {
+  .toc-link::before,
+  .swap-label {
     transform: none !important;
   }
 
-  .button:active {
+  .button:active,
+  .icon-link:active {
     transform: none;
   }
 }
@@ -495,8 +637,10 @@
     position: static;
   }
 
+  .hello,
   .toc,
   .skip-link,
+  .social,
   .actions button,
   .footer {
     display: none;
@@ -517,13 +661,23 @@
     padding-top: 14pt;
   }
 
+  .section-title {
+    font-size: 14pt;
+    margin-bottom: 8pt;
+  }
+
   .entry {
+    padding: 0;
     break-inside: avoid;
     grid-template-columns: 8rem minmax(0, 1fr);
   }
 
   .skill-row {
     grid-template-columns: 8rem minmax(0, 1fr);
+  }
+
+  .tag {
+    padding: 0 6px 0 0;
   }
 
   .button {

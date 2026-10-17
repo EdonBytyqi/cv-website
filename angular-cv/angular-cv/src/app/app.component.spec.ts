@@ -1,18 +1,25 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
+  let fixture: ComponentFixture<AppComponent>;
+  let component: AppComponent;
   let compiled: HTMLElement;
 
   beforeEach(async () => {
+    sessionStorage.removeItem('cv-hello-seen');
+
     await TestBed.configureTestingModule({
       imports: [AppComponent],
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
     compiled = fixture.nativeElement as HTMLElement;
   });
+
+  afterEach(() => sessionStorage.removeItem('cv-hello-seen'));
 
   it('renders the name as the page heading', () => {
     expect(compiled.querySelector('h1')?.textContent).toContain('Edon Bytyqi');
@@ -39,5 +46,64 @@ describe('AppComponent', () => {
 
   it('renders the experience entries', () => {
     expect(compiled.querySelectorAll('#experience .entry').length).toBe(2);
+  });
+
+  describe('welcome', () => {
+    it('can be skipped, which reveals the page and remembers it for the session', () => {
+      if (!component.introActive()) pending('reduced motion is on in this browser');
+      expect(compiled.querySelector('.hello')).not.toBeNull();
+      expect(compiled.querySelector('.layout.ready')).toBeNull();
+
+      component.skipIntro();
+      fixture.detectChanges();
+
+      expect(compiled.querySelector('.hello')).toBeNull();
+      expect(compiled.querySelector('.layout.ready')).not.toBeNull();
+      expect(sessionStorage.getItem('cv-hello-seen')).toBe('1');
+    });
+  });
+
+  describe('tooltips', () => {
+    const hover = (id: string) =>
+      component.showTooltip(id, new PointerEvent('pointerenter', { pointerType: 'mouse' }));
+
+    it('delays the first tooltip, then opens neighbours instantly', fakeAsync(() => {
+      hover('github');
+      tick(300);
+      expect(component.openTooltip()).toBeNull();
+      tick(200);
+      expect(component.openTooltip()).toBe('github');
+      expect(component.tooltipInstant()).toBeFalse();
+
+      component.hideTooltip();
+      hover('email');
+      expect(component.openTooltip()).toBe('email');
+      expect(component.tooltipInstant()).toBeTrue();
+
+      component.hideTooltip();
+      tick(300);
+      hover('linkedin');
+      expect(component.openTooltip()).toBeNull();
+      tick(500);
+      expect(component.openTooltip()).toBe('linkedin');
+    }));
+
+    it('ignores touch', fakeAsync(() => {
+      component.showTooltip('github', new PointerEvent('pointerenter', { pointerType: 'touch' }));
+      tick(1000);
+      expect(component.openTooltip()).toBeNull();
+    }));
+  });
+
+  it('swaps the copy button to its confirmation state', async () => {
+    spyOn(navigator.clipboard, 'writeText').and.resolveTo();
+    const button = compiled.querySelector<HTMLButtonElement>('button.swap')!;
+    expect(button.dataset['state']).toBe('idle');
+
+    await component.copyEmail();
+    fixture.detectChanges();
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('edonbytyqi@outlook.com');
+    expect(button.dataset['state']).toBe('copied');
   });
 });

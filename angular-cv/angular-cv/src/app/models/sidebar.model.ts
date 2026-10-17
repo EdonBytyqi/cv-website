@@ -7,6 +7,7 @@ export interface NavigationItem {
 export interface SocialLink {
   label: string;
   url: string;
+  icon: 'linkedin' | 'github';
 }
 
 export interface SidebarData {
