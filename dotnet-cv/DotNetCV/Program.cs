@@ -54,30 +54,25 @@ builder.Services.AddHealthChecks();
 // Add services to the container
 builder.Services.AddControllersWithViews();
 
-// Add API explorer for Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+// Built-in OpenAPI document; XML comments are picked up automatically
+builder.Services.AddOpenApi(options =>
 {
-    options.SwaggerDoc("v1", new()
+    options.AddDocumentTransformer((document, _, _) =>
     {
-        Title = "CV API",
-        Version = "v1",
-        Description = "RESTful API for Edon Bytyqi's CV data",
-        Contact = new()
+        document.Info = new()
         {
-            Name = "Edon Bytyqi",
-            Email = "edonbytyqi@outlook.com",
-            Url = new Uri("https://edonbytyqi.com")
-        }
+            Title = "CV API",
+            Version = "v1",
+            Description = "RESTful API for Edon Bytyqi's CV data",
+            Contact = new()
+            {
+                Name = "Edon Bytyqi",
+                Email = "edonbytyqi@outlook.com",
+                Url = new Uri("https://edonbytyqi.com")
+            }
+        };
+        return Task.CompletedTask;
     });
-
-    // Include XML comments if available
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-    {
-        options.IncludeXmlComments(xmlPath);
-    }
 });
 
 // The CV content never changes at runtime, so one shared instance is enough
@@ -93,11 +88,11 @@ if (!app.Environment.IsDevelopment())
 }
 else
 {
-    // Enable Swagger in development
-    app.UseSwagger();
+    // OpenAPI document at /openapi/v1.json and Swagger UI at /api/docs, in development only
+    app.MapOpenApi();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CV API v1");
+        options.SwaggerEndpoint("/openapi/v1.json", "CV API v1");
         options.RoutePrefix = "api/docs";
     });
 }
