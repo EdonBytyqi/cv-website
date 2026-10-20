@@ -1,0 +1,35 @@
+.site-footer {
+  border-top: 2px solid var(--color-ink);
+  padding: 2rem var(--gutter);
+}
+
+.inner {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.signature {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--color-ink-muted);
+}
+
+.signature .hand {
+  margin-right: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.links a {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}

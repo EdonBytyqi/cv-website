@@ -1,0 +1,29 @@
+.groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+}
+
+.group-title {
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--color-ink);
+}
+
+.stickers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.sticker {
+  padding: 0.4rem 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  background: var(--color-card);
+  border: 1.5px solid var(--color-ink);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 var(--color-ink);
+}

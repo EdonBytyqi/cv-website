@@ -1,0 +1,32 @@
+<section id="home" class="hero" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <div class="intro">
+      <span class="section-label">Curriculum vitae</span>
+      <h1 id="hero-heading" class="name">
+        {{ firstName() }}
+        <span class="marker">{{ lastName() }}</span>
+      </h1>
+      <p class="title">{{ aboutMe().title }}</p>
+
+      <div class="actions">
+        <a class="button button--primary" href="#contact">Get in touch</a>
+        <a class="button" href="#experience">See my work</a>
+      </div>
+
+      <p class="built-with"><span class="dot" aria-hidden="true"></span> Built with Angular 22</p>
+    </div>
+
+    <figure class="polaroid">
+      <span class="tape" aria-hidden="true"></span>
+      <img
+        [ngSrc]="aboutMe().profileImageUrl"
+        width="300"
+        height="400"
+        priority
+        [alt]="aboutMe().fullName + ', portrait photo'" />
+      @if (currentlyAt(); as note) {
+        <figcaption class="hand">{{ note }}</figcaption>
+      }
+    </figure>
+  </div>
+</section>
