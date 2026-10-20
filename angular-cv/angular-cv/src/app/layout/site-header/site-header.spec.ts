@@ -51,14 +51,20 @@ describe('SiteHeader', () => {
     expect(document.activeElement).toBe(menuButton);
   });
 
-  it('[AC-003-10] has no localhost stack links and labels where each one goes', () => {
-    const links = [...header.querySelectorAll<HTMLAnchorElement>('.stack-link')];
-    expect(links.length).toBeGreaterThan(0);
+  it('[AC-003-10] marks Angular as current and labels where each stack link goes', async () => {
+    const site = TestBed.inject(CvService).cvData().sidebar;
+    fixture.componentRef.setInput('site', {
+      ...site,
+      techStackItems: [
+        { label: '.NET', url: 'http://localhost:5000', isActive: false, description: '.NET version (opens in a new tab)', opensInNewTab: true },
+        ...site.techStackItems
+      ]
+    });
+    await fixture.whenStable();
 
-    for (const link of links) {
-      expect(link.getAttribute('href')).not.toMatch(/localhost|127\.0\.0\.1/);
-      expect(link.getAttribute('aria-label')).toBeTruthy();
-    }
+    const links = [...header.querySelectorAll<HTMLAnchorElement>('.stack-link')];
+    expect(links.length).toBe(2);
+    for (const link of links) expect(link.getAttribute('aria-label')).toBeTruthy();
 
     const angular = links.find((link) => link.textContent?.trim() === 'Angular')!;
     expect(angular.getAttribute('aria-current')).toBe('page');

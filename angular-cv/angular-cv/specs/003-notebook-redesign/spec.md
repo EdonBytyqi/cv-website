@@ -84,7 +84,6 @@ Out of scope:
   points to `localhost`, and the .NET entry is hidden until that site is
   hosted.
 
-
 ## Manual checks
 
 - Ink, muted ink and teal on paper and card colours meet WCAG AA contrast.

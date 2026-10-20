@@ -1,4 +1,5 @@
-import { Service, signal } from '@angular/core';
+import { InjectionToken, Service, inject, signal } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { CvData } from '../models/cv-data.model';
 import { AboutMe } from '../models/about-me.model';
 import { Experience } from '../models/experience.model';
@@ -9,8 +10,16 @@ import { SidebarData } from '../models/sidebar.model';
 
 // Content mirrors the CV (translated to English). This repository is public:
 // never add a phone number, street address, date of birth or permit details.
+/** URL of the .NET version of this CV, or null to hide its stack link (see the environment files). */
+export const DOTNET_CV_URL = new InjectionToken<string | null>('DOTNET_CV_URL', {
+  factory: () => environment.dotnetCvUrl
+});
+
 @Service()
 export class CvService {
+  // Must be declared before cvData, which reads it while initialising
+  private readonly dotnetCvUrl = inject(DOTNET_CV_URL);
+
   // The CV content is static, so a single read-only signal is enough
   readonly cvData = signal<CvData>({
     aboutMe: this.createAboutMe(),
@@ -240,14 +249,15 @@ export class CvService {
         { label: 'CONTACT', href: '#contact', isActive: false }
       ],
       techStackItems: [
-        // The .NET site isn't hosted yet, so link to its source. Swap in its URL once it is deployed.
-        {
-          label: '.NET',
-          url: 'https://github.com/EdonBytyqi/cv-website/tree/main/dotnet-cv',
-          isActive: false,
-          description: '.NET version: source code on GitHub (opens in a new tab)',
-          opensInNewTab: true
-        },
+        ...(this.dotnetCvUrl
+          ? [{
+              label: '.NET',
+              url: this.dotnetCvUrl,
+              isActive: false,
+              description: '.NET version of this CV (opens in a new tab)',
+              opensInNewTab: true
+            }]
+          : []),
         { label: 'Angular', url: './', isActive: true, description: 'Angular version of this CV (this page)', opensInNewTab: false }
       ],
       socialLinks: [
