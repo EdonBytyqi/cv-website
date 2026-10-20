@@ -81,11 +81,7 @@ describe('App', () => {
     it('[AC-001-08] links the email address with mailto:', () => {
       expect(page.querySelector(`a[href="mailto:${cv.contact.email}"]`)).toBeTruthy();
     });
-
-    it('[AC-001-09] strips whitespace from the phone link', () => {
-      expect(page.querySelector('a[href^="tel:"]')?.getAttribute('href')).toBe('tel:' + cv.contact.phone.replace(/\s/g, ''));
-    });
-
+
     it('[AC-001-10] renders each address line on its own line', () => {
       const lines = cv.contact.fullAddress!.split('\n');
       const address = [...page.querySelectorAll('#contact p, #contact address')]

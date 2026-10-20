@@ -11,6 +11,6 @@ import { Reveal } from '../../shared/reveal';
 export class Contact {
   readonly contact = input.required<ContactDetails>();
 
-  protected readonly phoneHref = computed(() => 'tel:' + this.contact().phone.replace(/\s/g, ''));
+  protected readonly phoneHref = computed(() => 'tel:' + (this.contact().phone ?? '').replace(/\s/g, ''));
   protected readonly addressLines = computed(() => this.contact().fullAddress?.split('\n') ?? []);
 }

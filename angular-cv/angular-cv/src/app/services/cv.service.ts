@@ -150,7 +150,6 @@ export class CvService {
     return {
       id: 1,
       email: 'edonbytyqi@outlook.com',
-      phone: '+41 XX XXX XX XX',
       location: '6020 Emmenbrücke, Switzerland',
       fullAddress: '6020 Emmenbrücke, Switzerland',
       linkedInUrl: 'https://linkedin.com/in/edon-bytyqi',

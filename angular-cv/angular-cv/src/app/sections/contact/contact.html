@@ -17,10 +17,12 @@
           <dt>Email</dt>
           <dd><a [href]="'mailto:' + contact().email">{{ contact().email }}</a></dd>
         </div>
-        <div>
-          <dt>Phone</dt>
-          <dd><a [href]="phoneHref()">{{ contact().phone }}</a></dd>
-        </div>
+        @if (contact().phone; as phone) {
+          <div>
+            <dt>Phone</dt>
+            <dd><a [href]="phoneHref()">{{ phone }}</a></dd>
+          </div>
+        }
         @if (addressLines().length > 0) {
           <div>
             <dt>Address</dt>

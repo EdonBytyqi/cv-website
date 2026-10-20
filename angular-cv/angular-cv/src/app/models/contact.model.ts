@@ -1,7 +1,7 @@
 export interface Contact {
   id: number;
   email: string;
-  phone: string;
+  phone?: string;
   location: string;
   fullAddress?: string;
   linkedInUrl: string;
