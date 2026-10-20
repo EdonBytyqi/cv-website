@@ -24,6 +24,6 @@
   font-size: 0.8125rem;
   background: var(--color-card);
   border: 1.5px solid var(--color-ink);
-  border-radius: 999px;
+  border-radius: 1rem; /* stays tidy when a long tag wraps */
   box-shadow: 2px 2px 0 var(--color-ink);
 }
