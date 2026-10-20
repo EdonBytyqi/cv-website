@@ -30,3 +30,4 @@ ID that no spec defines.
 | --- | --- |
 | [001 CV page](001-cv-page/spec.md) | Implemented |
 | [002 API and security](002-api-and-security/spec.md) | Implemented |
+| [003 Notebook redesign](003-notebook-redesign/spec.md) | Draft |
