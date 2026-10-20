@@ -1,11 +1,9 @@
 name: Angular CI
 
 on:
+  # Every PR runs this, because it's a required check on main (a path filter would leave
+  # unrelated PRs waiting forever for a check that never starts)
   pull_request:
-    paths:
-      - 'angular-cv/**'
-      - 'specs/**'
-      - '.github/workflows/angular-*.yml'
   push:
     branches: [main]
     paths:
