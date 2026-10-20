@@ -81,5 +81,5 @@ Out of scope:
 - Buttons scale to 0.97 when pressed. Hover and press feedback stays under
   200ms.
 - Scroll reveal runs once per element (600ms clip-path, 50ms stagger). With
-  reduced motion it is replaced by a 200ms fade.
+  reduced motion, nothing is hidden or revealed.
 - The header and menu work at 320px width without horizontal scroll.
