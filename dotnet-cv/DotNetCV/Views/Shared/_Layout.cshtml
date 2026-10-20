@@ -1,7 +1,7 @@
-@using DotNetCV.Services
-@inject ICvService CvService
+@using DotNetCV.ViewModels
 @{
-    var sidebar = CvService.GetCv().Sidebar;
+    // Only the CV page has a sidebar model, so the error page never depends on the CV service
+    var sidebar = (Model as CvViewModel)?.Sidebar;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -17,34 +17,37 @@
 </head>
 
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo"></div>
-            <h3>@sidebar.Name</h3>
-        </div>
-        <nav class="sidebar-nav" aria-label="Main navigation">
-            @foreach (var item in sidebar.NavigationItems)
-            {
-                <a href="@item.Href" class="nav-item">@item.Label</a>
-            }
-        </nav>
-        <div class="tech-switch">
-            <div class="switch-label">TECH STACK</div>
-            @foreach (var tech in sidebar.TechStackItems)
-            {
-                <a href="@tech.Url" class="tech-btn @(tech.IsActive ? "active" : null)">@tech.Label</a>
-            }
-        </div>
-        <div class="sidebar-footer">
-            <div class="social-links">
-                @foreach (var link in sidebar.SocialLinks)
+    @if (sidebar is not null)
+    {
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo"></div>
+                <h3>@sidebar.Name</h3>
+            </div>
+            <nav class="sidebar-nav" aria-label="Main navigation">
+                @foreach (var item in sidebar.NavigationItems)
                 {
-                    <a href="@link.Url" class="social-icon" target="_blank" rel="noopener noreferrer"
-                        aria-label="@link.Label (opens in a new tab)">@link.Icon</a>
+                    <a href="@item.Href" class="nav-item">@item.Label</a>
+                }
+            </nav>
+            <div class="tech-switch">
+                <div class="switch-label">TECH STACK</div>
+                @foreach (var tech in sidebar.TechStackItems)
+                {
+                    <a href="@tech.Url" class="tech-btn @(tech.IsActive ? "active" : null)">@tech.Label</a>
                 }
             </div>
+            <div class="sidebar-footer">
+                <div class="social-links">
+                    @foreach (var link in sidebar.SocialLinks)
+                    {
+                        <a href="@link.Url" class="social-icon" target="_blank" rel="noopener noreferrer"
+                            aria-label="@link.Label (opens in a new tab)">@link.Icon</a>
+                    }
+                </div>
+            </div>
         </div>
-    </div>
+    }
     <div class="main-content">
         @RenderBody()
     </div>
