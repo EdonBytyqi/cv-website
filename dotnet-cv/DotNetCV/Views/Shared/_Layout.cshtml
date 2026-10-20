@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Edon Bytyqi</title>
     <meta name="description"
-        content="Edon Bytyqi - Experienced Software Developer specializing in Avaloq, SAP, and .NET development">
+        content="Edon Bytyqi – software developer with 6+ years in enterprise IT: SAP, Avaloq, C#/.NET and production GenAI systems (RAG, agents, MCP)">
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
@@ -34,7 +34,11 @@
                 <div class="switch-label">TECH STACK</div>
                 @foreach (var tech in sidebar.TechStackItems)
                 {
-                    <a href="@tech.Url" class="tech-btn @(tech.IsActive ? "active" : null)">@tech.Label</a>
+                    <a href="@tech.Url" class="tech-btn @(tech.IsActive ? "active" : null)"
+                        aria-label="@tech.Description"
+                        aria-current="@(tech.IsActive ? "page" : null)"
+                        target="@(tech.OpensInNewTab ? "_blank" : null)"
+                        rel="@(tech.OpensInNewTab ? "noopener noreferrer" : null)">@tech.Label</a>
                 }
             </div>
             <div class="sidebar-footer">
