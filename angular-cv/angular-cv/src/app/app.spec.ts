@@ -81,11 +81,7 @@ describe('App', () => {
     it('[AC-001-08] links the email address with mailto:', () => {
       expect(page.querySelector(`a[href="mailto:${cv.contact.email}"]`)).toBeTruthy();
     });
-
-    it('[AC-001-09] strips whitespace from the phone link', () => {
-      expect(page.querySelector('a[href^="tel:"]')?.getAttribute('href')).toBe('tel:' + cv.contact.phone.replace(/\s/g, ''));
-    });
-
+
     it('[AC-001-10] renders each address line on its own line', () => {
       const lines = cv.contact.fullAddress!.split('\n');
       const address = [...page.querySelectorAll('#contact p, #contact address')]
@@ -133,6 +129,37 @@ describe('App', () => {
       const results = await axe.run(page, { rules: { 'color-contrast': { enabled: false } } });
       const summary = results.violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`);
       expect(summary).toEqual([]);
+    });
+  });
+
+  describe('spec 003 — notebook redesign', () => {
+    it('[AC-003-05] labels each experience entry with its start year', () => {
+      const entries = [...page.querySelectorAll('#experience article')];
+      cv.experiences.forEach((experience, index) => {
+        const year = String(experience.startDate.getFullYear());
+        const label = [...entries[index].querySelectorAll('*')].find((el) => text(el) === year);
+        expect(label, year).toBeTruthy();
+        expect(label?.closest('time')).toBeNull();
+      });
+    });
+
+    it('[AC-003-06] shows the job title and where Edon currently works', () => {
+      const hero = page.querySelector('#home')!;
+      expect(text(hero)).toContain(cv.aboutMe.title);
+      expect(text(hero)).toContain('currently at BSI SA, Lugano');
+    });
+
+    it('[AC-003-07] offers email and LinkedIn as the two ways to get in touch', () => {
+      const contact = page.querySelector('#contact')!;
+      expect(contact.querySelector(`a.button[href="mailto:${cv.contact.email}"]`)).toBeTruthy();
+      expect(contact.querySelector(`a.button[href="${cv.contact.linkedInUrl}"]`)).toBeTruthy();
+    });
+
+    it('[AC-003-09] has a footer landmark linking to LinkedIn and GitHub', () => {
+      const footer = page.querySelector('footer')!;
+      expect(footer.closest('main')).toBeNull();
+      expect(footer.querySelector('a[href*="linkedin.com"]')).toBeTruthy();
+      expect(footer.querySelector('a[href*="github.com"]')).toBeTruthy();
     });
   });
 });

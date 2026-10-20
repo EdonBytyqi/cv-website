@@ -37,6 +37,8 @@ Out of scope:
 - **AC-001-09** The phone link has `href` `tel:` followed by the number with
   all whitespace removed.
 - **AC-001-10** Each line of the postal address is rendered on its own line.
+- **AC-001-11** When no phone number is set in `CvService`, the page shows no
+  phone entry and no `tel:` link. AC-001-09 applies only when a number is set.
 
 ## Manual checks
 

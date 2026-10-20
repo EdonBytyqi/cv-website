@@ -1,0 +1,41 @@
+<section id="contact" class="section" aria-labelledby="contact-heading">
+  <div class="section-inner">
+    <span class="section-label">05 — Contact</span>
+    <h2 id="contact-heading" class="section-title">Let's talk</h2>
+
+    <div class="note-paper" appReveal>
+      <p class="hand">Two ways in:</p>
+      <div class="ways">
+        <a class="button button--primary" [href]="'mailto:' + contact().email">Email me</a>
+        <a class="button" [href]="contact().linkedInUrl" target="_blank" rel="noopener noreferrer">
+          Connect on LinkedIn <span class="visually-hidden">(opens in a new tab)</span>
+        </a>
+      </div>
+
+      <dl class="details">
+        <div>
+          <dt>Email</dt>
+          <dd><a [href]="'mailto:' + contact().email">{{ contact().email }}</a></dd>
+        </div>
+        @if (contact().phone; as phone) {
+          <div>
+            <dt>Phone</dt>
+            <dd><a [href]="phoneHref()">{{ phone }}</a></dd>
+          </div>
+        }
+        @if (addressLines().length > 0) {
+          <div>
+            <dt>Address</dt>
+            <dd>
+              <address>
+                @for (line of addressLines(); track $index) {
+                  {{ line }}@if (!$last) {<br>}
+                }
+              </address>
+            </dd>
+          </div>
+        }
+      </dl>
+    </div>
+  </div>
+</section>

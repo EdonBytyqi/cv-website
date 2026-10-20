@@ -1,0 +1,43 @@
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="#home">
+      <span class="monogram" aria-hidden="true">EB</span>
+      <span class="brand-name">{{ site().name }}</span>
+    </a>
+
+    <button
+      #menuButton
+      type="button"
+      class="menu-toggle"
+      aria-controls="site-nav-list"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()">
+      {{ menuOpen() ? 'Close' : 'Menu' }}
+    </button>
+
+    <nav class="site-nav" aria-label="Main navigation">
+      <ul id="site-nav-list" class="nav-list" [class.open]="menuOpen()">
+        @for (item of site().navigationItems; track item.href) {
+          <li>
+            <a class="nav-link" [href]="item.href" (click)="closeMenu()">{{ item.label }}</a>
+          </li>
+        }
+        <li class="stack-switch">
+          <span class="stack-label">Stack</span>
+          @for (tech of site().techStackItems; track tech.url) {
+            <a
+              class="stack-link"
+              [href]="tech.url"
+              [class.current]="tech.isActive"
+              [attr.aria-current]="tech.isActive ? 'page' : null"
+              [attr.aria-label]="tech.description"
+              [attr.target]="tech.opensInNewTab ? '_blank' : null"
+              [attr.rel]="tech.opensInNewTab ? 'noopener noreferrer' : null">
+              {{ tech.label }}
+            </a>
+          }
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

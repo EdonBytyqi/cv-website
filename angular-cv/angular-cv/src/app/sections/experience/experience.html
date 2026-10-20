@@ -1,0 +1,30 @@
+<section id="experience" class="section" aria-labelledby="experience-heading">
+  <div class="section-inner">
+    <span class="section-label">02 — Experience</span>
+    <h2 id="experience-heading" class="section-title">Where I've worked</h2>
+
+    <ol class="timeline">
+      @for (exp of experiences(); track exp.id) {
+        <li class="entry" [appReveal]="$index * 60">
+          <article class="entry-grid">
+            <span class="year">{{ exp.startDate | date: 'yyyy' }}</span>
+            <div class="card">
+              <time class="range" [attr.datetime]="exp.startDate.toISOString()">
+                {{ exp.startDate | date: 'MMM yyyy' }} – {{ exp.isCurrentJob ? 'Present' : (exp.endDate | date: 'MMM yyyy') }}
+              </time>
+              <h3 class="role">{{ exp.jobTitle }}</h3>
+              <p class="company">{{ exp.company }}@if (exp.location) {, {{ exp.location }}}</p>
+              @if (exp.responsibilities.length > 0) {
+                <ul class="duties">
+                  @for (responsibility of exp.responsibilities; track $index) {
+                    <li>{{ responsibility }}</li>
+                  }
+                </ul>
+              }
+            </div>
+          </article>
+        </li>
+      }
+    </ol>
+  </div>
+</section>

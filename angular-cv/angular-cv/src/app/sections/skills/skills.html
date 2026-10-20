@@ -1,0 +1,19 @@
+<section id="skills" class="section" aria-labelledby="skills-heading">
+  <div class="section-inner">
+    <span class="section-label">04 — Skills</span>
+    <h2 id="skills-heading" class="section-title">What I work with</h2>
+
+    <div class="groups">
+      @for (category of categories(); track category.categoryName) {
+        <article class="group" [appReveal]="$index * 60">
+          <h3 class="group-title">{{ category.categoryName }}</h3>
+          <ul class="stickers">
+            @for (skill of category.skills; track skill.id) {
+              <li class="sticker">{{ skill.name }}</li>
+            }
+          </ul>
+        </article>
+      }
+    </div>
+  </div>
+</section>

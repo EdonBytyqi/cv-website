@@ -1,0 +1,45 @@
+/* Lined note paper with a margin rule (aori-style call to action) */
+.note-paper {
+  position: relative;
+  max-width: 46rem;
+  padding: clamp(1.75rem, 5vw, 3rem) clamp(1.5rem, 5vw, 3rem) clamp(1.75rem, 5vw, 3rem) clamp(2.5rem, 7vw, 4.5rem);
+  background-color: var(--color-card);
+  background-image:
+    linear-gradient(90deg, transparent clamp(1.5rem, 5vw, 3rem), rgba(31, 95, 91, 0.35) clamp(1.5rem, 5vw, 3rem), rgba(31, 95, 91, 0.35) calc(clamp(1.5rem, 5vw, 3rem) + 2px), transparent calc(clamp(1.5rem, 5vw, 3rem) + 2px)),
+    repeating-linear-gradient(transparent 0, transparent 2rem, var(--color-line) 2rem, var(--color-line) calc(2rem + 1px));
+  border: var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hard);
+  rotate: -0.6deg;
+}
+
+.ways {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+dt {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+dd {
+  margin-top: 0.25rem;
+  overflow-wrap: anywhere;
+}
+
+address {
+  font-style: normal;
+}
