@@ -1,16 +1,11 @@
 namespace DotNetCV.Models;
 
-public class Skill
+/// <summary>
+/// A named group of skills.
+/// </summary>
+public sealed class SkillCategory
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Category { get; set; } = string.Empty;
-    public int ProficiencyLevel { get; set; }
-    public int SortOrder { get; set; }
-}
+    public required string CategoryName { get; init; }
 
-public class SkillCategory
-{
-    public string CategoryName { get; set; } = string.Empty;
-    public List<Skill> Skills { get; set; } = new();
+    public required IReadOnlyList<string> Skills { get; init; }
 }

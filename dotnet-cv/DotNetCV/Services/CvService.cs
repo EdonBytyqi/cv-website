@@ -1,204 +1,263 @@
+using DotNetCV.Configuration;
 using DotNetCV.Models;
 using DotNetCV.ViewModels;
+using Microsoft.Extensions.Options;
 
 namespace DotNetCV.Services;
 
-public class CvService : ICvService
+/// <summary>
+/// Serves the CV content. The content is static, so it is built once per (singleton) instance.
+/// </summary>
+/// <remarks>
+/// Content mirrors the CV (translated to English) and the Angular version. This repository
+/// is public: never add a phone number, street address, date of birth or permit details.
+/// </remarks>
+public sealed class CvService(IOptions<StackLinkOptions> stackLinks) : ICvService
 {
-    // For now, this returns hardcoded data. Later we'll replace this with Supabase calls
+    private readonly CvViewModel _cv = CreateCv(
+        (stackLinks ?? throw new ArgumentNullException(nameof(stackLinks))).Value.AngularUrl);
 
-    public Task<AboutMe> GetAboutMeAsync()
+    public CvViewModel GetCv() => _cv;
+
+    private static CvViewModel CreateCv(string angularUrl) => new()
     {
-        var aboutMe = new AboutMe
+        AboutMe = new AboutMe
         {
-            Id = 1,
             FullName = "Edon Bytyqi",
-            Title = "Software Developer",
-            Bio = "Experienced software developer specializing in Avaloq, SAP, and .NET development. Passionate about creating efficient and scalable solutions.",
-            ProfileImageUrl = "/assets/images/profile.jpg",
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-
-        return Task.FromResult(aboutMe);
-    }
-
-    public Task<List<Experience>> GetExperiencesAsync()
-    {
-        var experiences = new List<Experience>
-        {
+            Title = "Software Developer · SAP · GenAI",
+            Bio = "Software developer with 6+ years in enterprise IT: SAP development, API integration and production GenAI systems. "
+                + "I specialise in SAP (Fiori, SAPUI5, ABAP OO, OData), the Avaloq Core Platform, C#/.NET and production AI solutions "
+                + "with LangChain, RAG, agentic AI, multi-agent orchestration and MCP. I design RAG architectures, work on prompt "
+                + "engineering and guardrails, and connect LLMs to real workflows. I like numbers and data analysis, work in a "
+                + "structured way that keeps to agreed timelines, and am a friendly, helpful team player.",
+            ProfileImageUrl = "/images/profile.jpg"
+        },
+        Experiences =
+        [
             new Experience
             {
-                Id = 1,
-                JobTitle = "Software Developer - SAP",
-                Company = "BSI SA",
-                Location = "Lugano, Switzerland",
-                StartDate = new DateTime(2024, 5, 1),
-                EndDate = null,
-                IsCurrentJob = true,
-                Responsibilities = new List<string>
-                {
-                    "Develop and maintain SAP applications",
-                    "Collaborate with cross-functional teams",
-                    "Implement new features and optimize existing code",
-                    "Participate in code reviews and knowledge sharing"
-                },
-                SortOrder = 1
+                JobTitle = "Professional Development & Independent Projects",
+                Company = "AI integration, software development",
+                Location = "",
+                StartDate = new DateOnly(2025, 4, 1),
+                Responsibilities =
+                [
+                    "Anthropic Academy certification programme 2026 (Anthropic / Skilljar): Claude 101, Claude Platform 101, "
+                        + "Claude Code 101, Claude Code in Action, Introduction to Model Context Protocol, Model Context Protocol: Advanced Topics",
+                    "Designed and built RAG systems for knowledge management: chunking, embeddings and retrieval with LangChain, "
+                        + "vector databases (Pinecone/Weaviate) and the Claude API",
+                    "Built multi-agent systems with orchestrated workflows: agent delegation, tool use and coordination via the "
+                        + "Model Context Protocol (MCP)",
+                    "Built AI automations with n8n, e.g. RSS aggregation with LLM-generated structured digests, including error "
+                        + "handling and cost control",
+                    "Prompt engineering, guardrails (NeMo) and model evaluation as everyday practice"
+                ]
             },
             new Experience
             {
-                Id = 2,
-                JobTitle = "Software Developer - Avaloq",
-                Company = "BSI SA",
-                Location = "Lugano, Switzerland",
-                StartDate = new DateTime(2023, 7, 1),
-                EndDate = new DateTime(2024, 4, 30),
-                IsCurrentJob = false,
-                Responsibilities = new List<string>
-                {
-                    "Developed banking solutions using Avaloq platform",
-                    "Customized workflows and business processes",
-                    "Maintained high code quality standards",
-                    "Worked in Agile/Scrum environment"
-                },
-                SortOrder = 2
+                JobTitle = "Junior Avaloq Customization Professional",
+                Company = "Luzerner Kantonalbank AG",
+                Location = "Lucerne, Switzerland",
+                StartDate = new DateOnly(2023, 9, 1),
+                EndDate = new DateOnly(2025, 3, 31),
+                Responsibilities =
+                [
+                    "Main responsibility for operating and technically parameterising the Avaloq core banking platform",
+                    "Developed and optimised complex SQL queries on Oracle for reporting, data analysis and quality assurance",
+                    "Derived requirements and specifications from business departments (Compliance, Operations, Controlling) "
+                        + "and translated them into technical solutions",
+                    "Provided application support for incidents and change requests (1st and 2nd level)",
+                    "Accompanied several go-lives from planning to production rollout"
+                ]
+            },
+            new Experience
+            {
+                JobTitle = "SAP ERP Developer",
+                Company = "Ringier AG",
+                Location = "Zofingen, Switzerland",
+                StartDate = new DateOnly(2021, 12, 1),
+                EndDate = new DateOnly(2023, 8, 31),
+                Responsibilities =
+                [
+                    "In-depth SAP ABAP development in an ERP environment",
+                    "REST API integration between SAP and Coupa (B2B), modernised from file transfer to API and running "
+                        + "error-free in production",
+                    "Worked with web technologies (REST APIs, JavaScript, TypeScript)",
+                    "Defined developer guidelines for Neptune DXP (SAP low-code)",
+                    "Built Google Apps Script automations for status notifications and IT account validation"
+                ]
+            },
+            new Experience
+            {
+                JobTitle = "Junior SAPUI5 Fiori Developer",
+                Company = "Axel Springer",
+                Location = "Berlin, Germany",
+                StartDate = new DateOnly(2020, 10, 1),
+                EndDate = new DateOnly(2021, 6, 30),
+                Responsibilities =
+                [
+                    "Developed Fiori applications for 2,000+ users internationally",
+                    "Implemented backend OData services for UI5 applications",
+                    "Advised business departments: gathered requirements, translated them into technical concepts and "
+                        + "estimated effort",
+                    "Worked with scalable architectures for enterprise applications",
+                    "Ensured application quality through testing"
+                ]
+            },
+            new Experience
+            {
+                JobTitle = "Junior SAP Developer",
+                Company = "abat AG",
+                Location = "Bremen, Germany",
+                StartDate = new DateOnly(2019, 1, 1),
+                EndDate = new DateOnly(2020, 9, 30),
+                Responsibilities =
+                [
+                    "Learned SAP ABAP from the ground up in an enterprise environment",
+                    "Developed structured, maintainable solutions",
+                    "SAP development in manufacturing for Mercedes-Benz: logistics, production, MM/SD",
+                    "Delivered SAP S/4HANA implementation projects in manufacturing (automotive/logistics, Mercedes-Benz)"
+                ]
             }
-        };
-
-        return Task.FromResult(experiences);
-    }
-
-    public Task<List<Education>> GetEducationAsync()
-    {
-        var education = new List<Education>
-        {
+        ],
+        Education =
+        [
             new Education
             {
-                Id = 1,
-                Degree = "Computer Science Apprenticeship",
-                Institution = "SPAI - Scuola Professionale Artigianale e Industriale",
-                Location = "Lugano, Switzerland",
-                StartDate = new DateTime(2019, 8, 1),
-                EndDate = new DateTime(2023, 6, 30),
-                Grade = "Excellent",
-                Description = "Comprehensive program covering software development, databases, and system design",
-                SortOrder = 1
+                Degree = "M-Files Solution Course",
+                Institution = "M-Files",
+                Location = "Helsinki (online)",
+                StartDate = new DateOnly(2025, 1, 1),
+                Description = "Python development and C# desktop development: built desktop applications with C#/.NET and WPF"
+            },
+            new Education
+            {
+                Degree = "Avaloq Certified Professional",
+                Institution = "Avaloq Group AG",
+                Location = "Zürich",
+                StartDate = new DateOnly(2024, 1, 1),
+                Grade = "Diploma"
+            },
+            new Education
+            {
+                Degree = "SAP, M-Files and other courses",
+                Institution = "udemy.com",
+                Location = "online",
+                StartDate = new DateOnly(2022, 1, 1),
+                IsOngoing = true
+            },
+            new Education
+            {
+                Degree = "Bachelor in Computer and Engineering Sciences",
+                Institution = "UBT – Higher Education Institution",
+                Location = "Prishtina, Kosovo",
+                StartDate = new DateOnly(2014, 9, 1),
+                EndDate = new DateOnly(2018, 6, 30)
             }
-        };
-
-        return Task.FromResult(education);
-    }
-
-    public Task<List<SkillCategory>> GetSkillCategoriesAsync()
-    {
-        var skillCategories = new List<SkillCategory>
-        {
+        ],
+        SkillCategories =
+        [
             new SkillCategory
             {
-                CategoryName = "Programming Languages",
-                Skills = new List<Skill>
-                {
-                    new Skill { Id = 1, Name = "C#", Category = "Programming Languages", ProficiencyLevel = 5, SortOrder = 1 },
-                    new Skill { Id = 2, Name = "TypeScript", Category = "Programming Languages", ProficiencyLevel = 4, SortOrder = 2 },
-                    new Skill { Id = 3, Name = "JavaScript", Category = "Programming Languages", ProficiencyLevel = 4, SortOrder = 3 },
-                    new Skill { Id = 4, Name = "SQL", Category = "Programming Languages", ProficiencyLevel = 4, SortOrder = 4 }
-                }
+                CategoryName = "AI Implementation",
+                Skills =
+                [
+                    "LLM integration (Claude API, OpenAI API)", "Prompt engineering", "RAG",
+                    "Vector databases (Pinecone, Weaviate)", "LangChain", "n8n", "NeMo Guardrails",
+                    "Model Context Protocol (MCP servers & tools)", "Agent-based systems",
+                    "Multi-agent orchestration / AI swarm architecture", "LLM orchestration", "Model evaluation",
+                    "AI output validation"
+                ]
             },
             new SkillCategory
             {
-                CategoryName = "Frameworks & Technologies",
-                Skills = new List<Skill>
-                {
-                    new Skill { Id = 5, Name = ".NET Core", Category = "Frameworks & Technologies", ProficiencyLevel = 5, SortOrder = 1 },
-                    new Skill { Id = 6, Name = "Angular", Category = "Frameworks & Technologies", ProficiencyLevel = 4, SortOrder = 2 },
-                    new Skill { Id = 7, Name = "Entity Framework", Category = "Frameworks & Technologies", ProficiencyLevel = 4, SortOrder = 3 },
-                    new Skill { Id = 8, Name = "ASP.NET MVC", Category = "Frameworks & Technologies", ProficiencyLevel = 5, SortOrder = 4 }
-                }
+                CategoryName = "ERP & Banking Systems",
+                Skills = ["ABAP OO", "SAP Fiori", "SAPUI5", "OData", "S/4HANA", "Neptune DXP", "Avaloq Core Platform"]
             },
             new SkillCategory
             {
-                CategoryName = "Tools & Platforms",
-                Skills = new List<Skill>
-                {
-                    new Skill { Id = 9, Name = "Git", Category = "Tools & Platforms", ProficiencyLevel = 4, SortOrder = 1 },
-                    new Skill { Id = 10, Name = "Azure", Category = "Tools & Platforms", ProficiencyLevel = 3, SortOrder = 2 },
-                    new Skill { Id = 11, Name = "Docker", Category = "Tools & Platforms", ProficiencyLevel = 3, SortOrder = 3 },
-                    new Skill { Id = 12, Name = "Visual Studio", Category = "Tools & Platforms", ProficiencyLevel = 5, SortOrder = 4 }
-                }
+                CategoryName = "Development",
+                Skills =
+                [
+                    "C#", ".NET", "WPF", "Angular", "TypeScript", "JavaScript", "Python", "PL/SQL",
+                    "PHP (basic)", "WordPress (basic)", "VBScript (basic)"
+                ]
+            },
+            new SkillCategory { CategoryName = "Databases", Skills = ["Oracle", "MSSQL", "MySQL", "Firebase"] },
+            new SkillCategory
+            {
+                CategoryName = "Application Management",
+                Skills = ["Requirements analysis (IREB)", "Backlog management", "Release coordination", "Testing/QA"]
             },
             new SkillCategory
             {
-                CategoryName = "Domain Expertise",
-                Skills = new List<Skill>
-                {
-                    new Skill { Id = 13, Name = "Avaloq", Category = "Domain Expertise", ProficiencyLevel = 4, SortOrder = 1 },
-                    new Skill { Id = 14, Name = "SAP", Category = "Domain Expertise", ProficiencyLevel = 4, SortOrder = 2 },
-                    new Skill { Id = 15, Name = "Banking Systems", Category = "Domain Expertise", ProficiencyLevel = 4, SortOrder = 3 }
-                }
+                CategoryName = "Automation & CI/CD",
+                Skills = ["GitHub Actions (automated builds & tests)", "GdUnit4 unit tests", "Test-driven development"]
+            },
+            new SkillCategory
+            {
+                CategoryName = "Systems & Integration",
+                Skills = ["M-Files", "SAP ERP", "Neptune DXP", "API integration"]
+            },
+            new SkillCategory
+            {
+                CategoryName = "Support & Methods",
+                Skills =
+                [
+                    "2nd/3rd-level support", "Error analysis", "Incident resolution", "Scrum", "Kanban", "Waterfall",
+                    "Requirements engineering"
+                ]
+            },
+            new SkillCategory
+            {
+                CategoryName = "Linux",
+                Skills =
+                [
+                    "Arch Linux (daily driver, KDE Plasma on Wayland)", "Linux administration", "Bash scripting",
+                    "System configuration", "Package management"
+                ]
+            },
+            new SkillCategory
+            {
+                CategoryName = "Languages",
+                Skills = ["German (C1, accent-free)", "English (B2/C1)", "Albanian (native)"]
             }
-        };
-
-        return Task.FromResult(skillCategories);
-    }
-
-    public Task<Contact> GetContactAsync()
-    {
-        var contact = new Contact
+        ],
+        Contact = new Contact
         {
-            Id = 1,
             Email = "edonbytyqi@outlook.com",
-            Phone = "+41 XX XXX XX XX",
-            Location = "Lugano, Switzerland",
+            Location = "6020 Emmenbrücke, Switzerland",
             LinkedInUrl = "https://linkedin.com/in/edon-bytyqi",
             GitHubUrl = "https://github.com/EdonBytyqi",
             WebsiteUrl = "https://edonbytyqi.com"
-        };
-
-        return Task.FromResult(contact);
-    }
-
-    public Task<SidebarViewModel> GetSidebarAsync()
-    {
-        var sidebar = new SidebarViewModel
+        },
+        Sidebar = new SidebarViewModel
         {
             Name = "EDON BYTYQI",
-            ProfileImageUrl = "/assets/images/profile.jpg",
-            NavigationItems = new List<NavigationItem>
-            {
-                new NavigationItem { Label = "HOME", Href = "#home", IsActive = true },
-                new NavigationItem { Label = "ABOUT", Href = "#about", IsActive = false },
-                new NavigationItem { Label = "EXPERIENCE", Href = "#experience", IsActive = false },
-                new NavigationItem { Label = "EDUCATION", Href = "#education", IsActive = false },
-                new NavigationItem { Label = "SKILLS", Href = "#skills", IsActive = false },
-                new NavigationItem { Label = "CONTACT", Href = "#contact", IsActive = false }
-            },
-            TechStackItems = new List<TechStackItem>
-            {
-                new TechStackItem { Label = ".NET", Url = "http://localhost:5000", IsActive = true },
-                new TechStackItem { Label = "Angular", Url = "http://localhost:4202", IsActive = false }
-            },
-            SocialLinks = new List<SocialLink>
-            {
-                new SocialLink { Label = "LinkedIn", Url = "https://linkedin.com/in/edon-bytyqi", Icon = "in" },
-                new SocialLink { Label = "GitHub", Url = "https://github.com/EdonBytyqi", Icon = "gh" }
-            }
-        };
-
-        return Task.FromResult(sidebar);
-    }
-
-    public async Task<CvViewModel> GetCompleteCvAsync()
-    {
-        var viewModel = new CvViewModel
-        {
-            AboutMe = await GetAboutMeAsync(),
-            Experiences = await GetExperiencesAsync(),
-            Education = await GetEducationAsync(),
-            SkillCategories = await GetSkillCategoriesAsync(),
-            Contact = await GetContactAsync(),
-            Sidebar = await GetSidebarAsync()
-        };
-
-        return viewModel;
-    }
+            NavigationItems =
+            [
+                new NavigationItem("HOME", "#home"),
+                new NavigationItem("ABOUT", "#about"),
+                new NavigationItem("EXPERIENCE", "#experience"),
+                new NavigationItem("EDUCATION", "#education"),
+                new NavigationItem("SKILLS", "#skills"),
+                new NavigationItem("CONTACT", "#contact")
+            ],
+            TechStackItems =
+            [
+                new TechStackItem(".NET", "/", IsActive: true, ".NET version of this CV (this page)", OpensInNewTab: false),
+                new TechStackItem(
+                    "Angular",
+                    angularUrl,
+                    IsActive: false,
+                    "Angular version of this CV (opens in a new tab)",
+                    OpensInNewTab: true)
+            ],
+            SocialLinks =
+            [
+                new SocialLink("LinkedIn", "https://linkedin.com/in/edon-bytyqi", "in"),
+                new SocialLink("GitHub", "https://github.com/EdonBytyqi", "gh")
+            ]
+        }
+    };
 }

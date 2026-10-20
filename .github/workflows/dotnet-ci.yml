@@ -1,0 +1,44 @@
+name: .NET CI
+
+on:
+  pull_request:
+    paths:
+      - 'dotnet-cv/**'
+      - '.github/workflows/dotnet-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'dotnet-cv/**'
+      - '.github/workflows/dotnet-ci.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dotnet-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: dotnet-cv
+
+jobs:
+  verify:
+    name: Build and test (incl. spec coverage)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: dotnet-cv/global.json
+
+      - name: Restore
+        run: dotnet restore DotNetCV.Tests
+
+      - name: Build (warnings are errors)
+        run: dotnet build DotNetCV.Tests --no-restore --configuration Release -warnaserror
+
+      - name: Test
+        run: dotnet test DotNetCV.Tests --no-build --configuration Release

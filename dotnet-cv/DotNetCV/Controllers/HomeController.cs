@@ -1,36 +1,15 @@
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using DotNetCV.Models;
 using DotNetCV.Services;
-using DotNetCV.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetCV.Controllers;
 
-public class HomeController : Controller
+public sealed class HomeController(ICvService cvService) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly ICvService _cvService;
-
-    public HomeController(ILogger<HomeController> logger, ICvService cvService)
-    {
-        _logger = logger;
-        _cvService = cvService;
-    }
-
-    public async Task<IActionResult> Index()
-    {
-        var cvData = await _cvService.GetCompleteCvAsync();
-        return View(cvData);
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+    public IActionResult Index() => View(cvService.GetCv());
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+    public IActionResult Error() =>
+        View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 }

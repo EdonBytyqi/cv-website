@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+@using DotNetCV.ViewModels
+@{
+    // Only the CV page has a sidebar model, so the error page never depends on the CV service
+    var cv = Model as CvViewModel;
+    var site = cv?.Sidebar;
+}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,44 +12,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Edon Bytyqi</title>
     <meta name="description"
-        content="Edon Bytyqi - Experienced Software Developer specializing in Avaloq, SAP, and .NET development">
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        content="Edon Bytyqi – software developer with 6+ years in enterprise IT: SAP, Avaloq, C#/.NET and production GenAI systems (RAG, agents, MCP)">
+    <link rel="preload" href="/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/DotNetCV.styles.css" asp-append-version="true" />
 </head>
 
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo"></div>
-            <h3>EDON BYTYQI</h3>
-        </div>
-        <nav class="sidebar-nav">
-            <a href="#home" class="nav-item active">HOME</a>
-            <a href="#about" class="nav-item">ABOUT</a>
-            <a href="#experience" class="nav-item">EXPERIENCE</a>
-            <a href="#education" class="nav-item">EDUCATION</a>
-            <a href="#skills" class="nav-item">SKILLS</a>
-            <a href="#contact" class="nav-item">CONTACT</a>
-        </nav>
-        <div class="tech-switch">
-            <div class="switch-label">TECH STACK</div>
-            <a href="http://localhost:5000" class="tech-btn active">.NET</a>
-            <a href="http://localhost:4202" class="tech-btn">Angular</a>
-        </div>
-        <div class="sidebar-footer">
-            <div class="social-links">
-                <a href="#" class="social-icon">in</a>
-                <a href="#" class="social-icon">gh</a>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    @if (site is not null)
+    {
+        <header class="site-header">
+            <div class="header-inner">
+                <a class="brand" href="#home">
+                    <span class="monogram" aria-hidden="true">EB</span>
+                    <span class="brand-name">@site.Name</span>
+                </a>
+
+                <button type="button" class="menu-toggle" aria-controls="site-nav-list" aria-expanded="false">Menu</button>
+
+                <nav class="site-nav" aria-label="Main navigation">
+                    <ul id="site-nav-list" class="nav-list">
+                        @foreach (var item in site.NavigationItems)
+                        {
+                            <li><a class="nav-link" href="@item.Href">@item.Label</a></li>
+                        }
+                        <li class="stack-switch">
+                            <span class="stack-label">Stack</span>
+                            @foreach (var tech in site.TechStackItems)
+                            {
+                                <a href="@tech.Url" class="stack-link @(tech.IsActive ? "current" : null)"
+                                    aria-label="@tech.Description"
+                                    aria-current="@(tech.IsActive ? "page" : null)"
+                                    target="@(tech.OpensInNewTab ? "_blank" : null)"
+                                    rel="@(tech.OpensInNewTab ? "noopener noreferrer" : null)">@tech.Label</a>
+                            }
+                        </li>
+                    </ul>
+                </nav>
             </div>
-        </div>
-    </div>
-    <div class="main-content">
+        </header>
+    }
+
+    <main id="main-content" tabindex="-1">
         @RenderBody()
-    </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    </main>
+
+    @if (cv is not null && site is not null)
+    {
+        <footer class="site-footer">
+            <div class="footer-inner">
+                <p class="signature"><span class="hand">thanks for reading!</span> @cv.AboutMe.FullName · built with ASP.NET Core</p>
+                <ul class="footer-links">
+                    @foreach (var link in site.SocialLinks)
+                    {
+                        <li>
+                            <a href="@link.Url" target="_blank" rel="noopener noreferrer">
+                                @link.Label <span class="visually-hidden">(opens in a new tab)</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </footer>
+    }
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
