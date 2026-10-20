@@ -124,8 +124,14 @@
 }
 
 @media (max-width: 860px) {
+  /* The nav stays in the flex row with zero width, so push the button right explicitly */
+  .inner {
+    gap: 0;
+  }
+
   .menu-toggle {
     display: block;
+    margin-left: auto;
   }
 
   /* The list stays in the DOM; visibility removes it from the tab order when closed */
