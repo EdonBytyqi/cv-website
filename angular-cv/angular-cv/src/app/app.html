@@ -83,26 +83,28 @@
     <section id="experience" class="content-section alt-bg" aria-labelledby="experience-heading">
       <div class="container-custom">
         <h2 id="experience-heading" class="section-title">EXPERIENCE</h2>
-        <div class="timeline" role="list">
+        <ol class="timeline">
           @for (exp of data.experiences; track exp.id) {
-            <article class="timeline-item" role="listitem">
-              <time class="timeline-date" [attr.datetime]="exp.startDate.toISOString()">
-                {{ exp.startDate | date: 'MMM yyyy' }} - {{ exp.isCurrentJob ? 'Present' : (exp.endDate | date: 'MMM yyyy') }}
-              </time>
-              <div class="timeline-content">
-                <h3>{{ exp.jobTitle }}</h3>
-                <h4>{{ exp.company }}@if (exp.location) {, {{ exp.location }}}</h4>
-                @if (exp.responsibilities.length > 0) {
-                  <ul>
-                    @for (responsibility of exp.responsibilities; track $index) {
-                      <li>{{ responsibility }}</li>
-                    }
-                  </ul>
-                }
-              </div>
-            </article>
+            <li class="timeline-item">
+              <article>
+                <time class="timeline-date" [attr.datetime]="exp.startDate.toISOString()">
+                  {{ exp.startDate | date: 'MMM yyyy' }} - {{ exp.isCurrentJob ? 'Present' : (exp.endDate | date: 'MMM yyyy') }}
+                </time>
+                <div class="timeline-content">
+                  <h3>{{ exp.jobTitle }}</h3>
+                  <h4>{{ exp.company }}@if (exp.location) {, {{ exp.location }}}</h4>
+                  @if (exp.responsibilities.length > 0) {
+                    <ul>
+                      @for (responsibility of exp.responsibilities; track $index) {
+                        <li>{{ responsibility }}</li>
+                      }
+                    </ul>
+                  }
+                </div>
+              </article>
+            </li>
           }
-        </div>
+        </ol>
       </div>
     </section>
 
