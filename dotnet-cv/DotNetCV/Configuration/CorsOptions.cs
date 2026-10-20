@@ -24,7 +24,7 @@ public sealed class CorsOptions
     /// <summary>
     /// Allowed HTTP methods
     /// </summary>
-    public string[] AllowedMethods { get; init; } = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
+    public string[] AllowedMethods { get; init; } = ["GET"];
 
     /// <summary>
     /// Allowed headers

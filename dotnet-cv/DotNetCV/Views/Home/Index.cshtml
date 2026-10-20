@@ -1,4 +1,5 @@
 @model DotNetCV.ViewModels.CvViewModel
+@using System.Globalization
 @{
     ViewData["Title"] = "Edon Bytyqi - CV";
 }
@@ -8,8 +9,7 @@
         <div class="hero-image">
             <div class="profile-circle"></div>
         </div>
-        <h1 class="hero-name">@Model.AboutMe.FullName.Split(' ')[0] <span
-                class="highlight">@Model.AboutMe.FullName.Split(' ')[1]</span></h1>
+        <h1 class="hero-name">@Model.AboutMe.FirstName <span class="highlight">@Model.AboutMe.LastName</span></h1>
         <p class="hero-subtitle">@Model.AboutMe.Title</p>
         <div class="tech-badge-hero">
             <span class="badge-dot"></span>
@@ -34,11 +34,11 @@
     <div class="container-custom">
         <h2 class="section-title">EXPERIENCE</h2>
         <div class="timeline">
-            @foreach (var exp in Model.Experiences.OrderBy(e => e.SortOrder))
+            @foreach (var exp in Model.Experiences)
             {
                 <div class="timeline-item">
                     <div class="timeline-date">
-                        @exp.StartDate.ToString("MMM yyyy") - @(exp.IsCurrentJob ? "Present" : exp.EndDate?.ToString("MMM         yyyy"))
+                        @exp.StartDate.ToString("MMM yyyy", CultureInfo.InvariantCulture) - @(exp.IsCurrentJob ? "Present" : exp.EndDate?.ToString("MMM yyyy", CultureInfo.InvariantCulture))
                     </div>
                     <div class="timeline-content">
                         <h3>@exp.JobTitle</h3>
@@ -63,12 +63,11 @@
     <div class="container-custom">
         <h2 class="section-title">EDUCATION</h2>
         <div class="education-grid">
-            @foreach (var edu in Model.Education.OrderBy(e => e.SortOrder))
+            @foreach (var edu in Model.Education)
             {
                 <div class="education-card">
                     <div class="edu-year">
-                        @edu.StartDate.ToString("yyyy")@(edu.EndDate.HasValue ? " - " + edu.EndDate.Value.ToString("yyyy") :
-                        "")
+                        @edu.StartDate.Year@(edu.EndDate is { } end && end.Year != edu.StartDate.Year ? $" - {end.Year}" : "")
                     </div>
                     <h3>@edu.Degree</h3>
                     <p>@edu.Institution@(string.IsNullOrEmpty(edu.Location) ? "" : ", " + edu.Location)</p>
@@ -95,9 +94,9 @@
                 <div class="skill-category">
                     <h3>@category.CategoryName</h3>
                     <div class="skill-tags">
-                        @foreach (var skill in category.Skills.OrderBy(s => s.SortOrder))
+                        @foreach (var skill in category.Skills)
                         {
-                            <span class="skill-tag">@skill.Name</span>
+                            <span class="skill-tag">@skill</span>
                         }
                     </div>
                 </div>
@@ -114,7 +113,7 @@
                 <div class="contact-icon">✉</div>
                 <div class="contact-info">
                     <h4>Email</h4>
-                    <p>@Model.Contact.Email</p>
+                    <p><a href="mailto:@Model.Contact.Email">@Model.Contact.Email</a></p>
                 </div>
             </div>
             <div class="contact-item">

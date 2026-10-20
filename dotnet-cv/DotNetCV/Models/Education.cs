@@ -1,14 +1,21 @@
 namespace DotNetCV.Models;
 
-public class Education
+/// <summary>
+/// A degree, certification or course.
+/// </summary>
+public sealed class Education
 {
-    public int Id { get; set; }
-    public string Degree { get; set; } = string.Empty;
-    public string Institution { get; set; } = string.Empty;
-    public string Location { get; set; } = string.Empty;
-    public DateTime StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
-    public string? Grade { get; set; }
-    public string? Description { get; set; }
-    public int SortOrder { get; set; }
+    public required string Degree { get; init; }
+
+    public required string Institution { get; init; }
+
+    public required string Location { get; init; }
+
+    public required DateOnly StartDate { get; init; }
+
+    public DateOnly? EndDate { get; init; }
+
+    public string? Grade { get; init; }
+
+    public string? Description { get; init; }
 }

@@ -1,14 +1,24 @@
 namespace DotNetCV.Models;
 
-public class Experience
+/// <summary>
+/// A role in the work history.
+/// </summary>
+public sealed class Experience
 {
-    public int Id { get; set; }
-    public string JobTitle { get; set; } = string.Empty;
-    public string Company { get; set; } = string.Empty;
-    public string Location { get; set; } = string.Empty;
-    public DateTime StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
-    public bool IsCurrentJob { get; set; }
-    public List<string> Responsibilities { get; set; } = new();
-    public int SortOrder { get; set; }
+    public required string JobTitle { get; init; }
+
+    public required string Company { get; init; }
+
+    public required string Location { get; init; }
+
+    public required DateOnly StartDate { get; init; }
+
+    /// <summary>
+    /// The end of the role, or <see langword="null"/> for the current role.
+    /// </summary>
+    public DateOnly? EndDate { get; init; }
+
+    public bool IsCurrentJob => EndDate is null;
+
+    public IReadOnlyList<string> Responsibilities { get; init; } = [];
 }

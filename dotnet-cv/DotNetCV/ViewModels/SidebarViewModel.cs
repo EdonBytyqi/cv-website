@@ -1,31 +1,21 @@
 namespace DotNetCV.ViewModels;
 
-public class SidebarViewModel
+/// <summary>
+/// Site name, navigation and links shown in the layout.
+/// </summary>
+public sealed class SidebarViewModel
 {
-    public string Name { get; set; } = string.Empty;
-    public string ProfileImageUrl { get; set; } = string.Empty;
-    public List<NavigationItem> NavigationItems { get; set; } = new();
-    public List<TechStackItem> TechStackItems { get; set; } = new();
-    public List<SocialLink> SocialLinks { get; set; } = new();
+    public required string Name { get; init; }
+
+    public required IReadOnlyList<NavigationItem> NavigationItems { get; init; }
+
+    public required IReadOnlyList<TechStackItem> TechStackItems { get; init; }
+
+    public required IReadOnlyList<SocialLink> SocialLinks { get; init; }
 }
 
-public class NavigationItem
-{
-    public string Label { get; set; } = string.Empty;
-    public string Href { get; set; } = string.Empty;
-    public bool IsActive { get; set; }
-}
+public sealed record NavigationItem(string Label, string Href);
 
-public class TechStackItem
-{
-    public string Label { get; set; } = string.Empty;
-    public string Url { get; set; } = string.Empty;
-    public bool IsActive { get; set; }
-}
+public sealed record TechStackItem(string Label, string Url, bool IsActive);
 
-public class SocialLink
-{
-    public string Label { get; set; } = string.Empty;
-    public string Url { get; set; } = string.Empty;
-    public string Icon { get; set; } = string.Empty;
-}
+public sealed record SocialLink(string Label, string Url, string Icon);

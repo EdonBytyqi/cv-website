@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+@using DotNetCV.Services
+@inject ICvService CvService
+@{
+    var sidebar = CvService.GetCv().Sidebar;
+}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,42 +13,41 @@
     <meta name="description"
         content="Edon Bytyqi - Experienced Software Developer specializing in Avaloq, SAP, and .NET development">
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/DotNetCV.styles.css" asp-append-version="true" />
 </head>
 
 <body>
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="logo"></div>
-            <h3>EDON BYTYQI</h3>
+            <h3>@sidebar.Name</h3>
         </div>
-        <nav class="sidebar-nav">
-            <a href="#home" class="nav-item active">HOME</a>
-            <a href="#about" class="nav-item">ABOUT</a>
-            <a href="#experience" class="nav-item">EXPERIENCE</a>
-            <a href="#education" class="nav-item">EDUCATION</a>
-            <a href="#skills" class="nav-item">SKILLS</a>
-            <a href="#contact" class="nav-item">CONTACT</a>
+        <nav class="sidebar-nav" aria-label="Main navigation">
+            @foreach (var item in sidebar.NavigationItems)
+            {
+                <a href="@item.Href" class="nav-item">@item.Label</a>
+            }
         </nav>
         <div class="tech-switch">
             <div class="switch-label">TECH STACK</div>
-            <a href="http://localhost:5000" class="tech-btn active">.NET</a>
-            <a href="http://localhost:4202" class="tech-btn">Angular</a>
+            @foreach (var tech in sidebar.TechStackItems)
+            {
+                <a href="@tech.Url" class="tech-btn @(tech.IsActive ? "active" : null)">@tech.Label</a>
+            }
         </div>
         <div class="sidebar-footer">
             <div class="social-links">
-                <a href="#" class="social-icon">in</a>
-                <a href="#" class="social-icon">gh</a>
+                @foreach (var link in sidebar.SocialLinks)
+                {
+                    <a href="@link.Url" class="social-icon" target="_blank" rel="noopener noreferrer"
+                        aria-label="@link.Label (opens in a new tab)">@link.Icon</a>
+                }
             </div>
         </div>
     </div>
     <div class="main-content">
         @RenderBody()
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

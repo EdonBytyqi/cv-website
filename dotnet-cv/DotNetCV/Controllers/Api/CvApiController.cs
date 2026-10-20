@@ -1,200 +1,46 @@
+using DotNetCV.Models;
 using DotNetCV.Services;
+using DotNetCV.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetCV.Controllers.Api;
 
 /// <summary>
-/// API controller for CV data
+/// Read-only JSON access to the CV content.
 /// </summary>
+/// <remarks>
+/// Unhandled errors go to the app's exception handler, so no internal details reach the client.
+/// </remarks>
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
-public sealed class CvApiController : ControllerBase
+public sealed class CvApiController(ICvService cvService) : ControllerBase
 {
-    private readonly ICvService _cvService;
-    private readonly ILogger<CvApiController> _logger;
-
-    public CvApiController(ICvService cvService, ILogger<CvApiController> logger)
-    {
-        ArgumentNullException.ThrowIfNull(cvService);
-        ArgumentNullException.ThrowIfNull(logger);
-
-        _cvService = cvService;
-        _logger = logger;
-    }
-
-    /// <summary>
-    /// Gets complete CV data
-    /// </summary>
-    /// <response code="200">Returns the complete CV data</response>
-    /// <response code="500">Internal server error</response>
+    /// <summary>Gets the complete CV.</summary>
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetCompleteCv()
-    {
-        try
-        {
-            var cv = await _cvService.GetCompleteCvAsync();
-            return Ok(cv);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving complete CV data");
-            return Problem(
-                title: "An error occurred while retrieving CV data",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status500InternalServerError);
-        }
-    }
+    public ActionResult<CvViewModel> GetCompleteCv() => cvService.GetCv();
 
-    /// <summary>
-    /// Gets about me information
-    /// </summary>
-    /// <response code="200">Returns the about me data</response>
-    /// <response code="500">Internal server error</response>
+    /// <summary>Gets the personal information.</summary>
     [HttpGet("about")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAboutMe()
-    {
-        try
-        {
-            var aboutMe = await _cvService.GetAboutMeAsync();
-            return Ok(aboutMe);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving about me data");
-            return Problem(
-                title: "An error occurred while retrieving about me data",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status500InternalServerError);
-        }
-    }
+    public ActionResult<AboutMe> GetAboutMe() => cvService.GetCv().AboutMe;
 
-    /// <summary>
-    /// Gets work experiences
-    /// </summary>
-    /// <response code="200">Returns the experiences list</response>
-    /// <response code="500">Internal server error</response>
+    /// <summary>Gets the work history, newest first.</summary>
     [HttpGet("experiences")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetExperiences()
-    {
-        try
-        {
-            var experiences = await _cvService.GetExperiencesAsync();
-            return Ok(experiences);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving experiences data");
-            return Problem(
-                title: "An error occurred while retrieving experiences data",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status500InternalServerError);
-        }
-    }
+    public ActionResult<IReadOnlyList<Experience>> GetExperiences() => Ok(cvService.GetCv().Experiences);
 
-    /// <summary>
-    /// Gets education history
-    /// </summary>
-    /// <response code="200">Returns the education list</response>
-    /// <response code="500">Internal server error</response>
+    /// <summary>Gets degrees, certifications and courses.</summary>
     [HttpGet("education")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetEducation()
-    {
-        try
-        {
-            var education = await _cvService.GetEducationAsync();
-            return Ok(education);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving education data");
-            return Problem(
-                title: "An error occurred while retrieving education data",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status500InternalServerError);
-        }
-    }
+    public ActionResult<IReadOnlyList<Education>> GetEducation() => Ok(cvService.GetCv().Education);
 
-    /// <summary>
-    /// Gets skill categories
-    /// </summary>
-    /// <response code="200">Returns the skills categorized</response>
-    /// <response code="500">Internal server error</response>
+    /// <summary>Gets the skills, grouped by category.</summary>
     [HttpGet("skills")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetSkills()
-    {
-        try
-        {
-            var skills = await _cvService.GetSkillCategoriesAsync();
-            return Ok(skills);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving skills data");
-            return Problem(
-                title: "An error occurred while retrieving skills data",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status500InternalServerError);
-        }
-    }
+    public ActionResult<IReadOnlyList<SkillCategory>> GetSkills() => Ok(cvService.GetCv().SkillCategories);
 
-    /// <summary>
-    /// Gets contact information
-    /// </summary>
-    /// <response code="200">Returns the contact data</response>
-    /// <response code="500">Internal server error</response>
+    /// <summary>Gets the public contact details.</summary>
     [HttpGet("contact")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetContact()
-    {
-        try
-        {
-            var contact = await _cvService.GetContactAsync();
-            return Ok(contact);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving contact data");
-            return Problem(
-                title: "An error occurred while retrieving contact data",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status500InternalServerError);
-        }
-    }
+    public ActionResult<Contact> GetContact() => cvService.GetCv().Contact;
 
-    /// <summary>
-    /// Gets sidebar data
-    /// </summary>
-    /// <response code="200">Returns the sidebar data</response>
-    /// <response code="500">Internal server error</response>
+    /// <summary>Gets the navigation and links shown in the layout.</summary>
     [HttpGet("sidebar")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetSidebar()
-    {
-        try
-        {
-            var sidebar = await _cvService.GetSidebarAsync();
-            return Ok(sidebar);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving sidebar data");
-            return Problem(
-                title: "An error occurred while retrieving sidebar data",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status500InternalServerError);
-        }
-    }
+    public ActionResult<SidebarViewModel> GetSidebar() => cvService.GetCv().Sidebar;
 }
