@@ -1,4 +1,5 @@
 using DotNetCV.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace DotNetCV.Tests.Integration;
@@ -64,18 +65,14 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
         Assert.Contains("Cloud and data courses", educationText);
     }
 
-    [Fact(DisplayName = "[AC-001-10] Has no localhost stack links and labels where each one goes")]
-    public async Task StackLinksAreSafe()
+    [Fact(DisplayName = "[AC-001-10] Marks .NET as current and labels where each stack link goes")]
+    public async Task StackLinksAreLabelled()
     {
         var page = await HtmlPage.LoadAsync(factory);
 
         var links = page.QuerySelectorAll(".stack-switch a");
         Assert.NotEmpty(links);
-        Assert.All(links, link =>
-        {
-            Assert.DoesNotContain("localhost", link.GetAttribute("href"));
-            Assert.False(string.IsNullOrWhiteSpace(link.GetAttribute("aria-label")));
-        });
+        Assert.All(links, link => Assert.False(string.IsNullOrWhiteSpace(link.GetAttribute("aria-label"))));
 
         var dotNet = Assert.Single(links, link => link.Text() == ".NET");
         Assert.Equal("page", dotNet.GetAttribute("aria-current"));
@@ -86,5 +83,23 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
             Assert.Equal("noopener noreferrer", link.GetAttribute("rel"));
             Assert.Contains("opens in a new tab", link.GetAttribute("aria-label"));
         });
+    }
+
+    [Theory(DisplayName = "[AC-001-11] Links Angular to the local dev server only in Development")]
+    [InlineData("Development", "http://localhost:4200")]
+    [InlineData("Production", "https://edonbytyqi.github.io/cv-website/")]
+    public async Task AngularLinkFollowsEnvironment(string environment, string expectedUrl)
+    {
+        using var app = factory.WithWebHostBuilder(builder => builder.UseEnvironment(environment));
+
+        var page = await HtmlPage.LoadAsync(app);
+        var links = page.QuerySelectorAll(".stack-switch a");
+
+        var angular = Assert.Single(links, link => link.Text() == "Angular");
+        Assert.Equal(expectedUrl, angular.GetAttribute("href"));
+        if (environment != "Development")
+        {
+            Assert.All(links, link => Assert.DoesNotContain("localhost", link.GetAttribute("href")));
+        }
     }
 }

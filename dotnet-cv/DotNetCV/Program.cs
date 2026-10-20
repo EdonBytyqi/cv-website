@@ -11,6 +11,11 @@ builder.Services.AddOptions<CorsOptions>()
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
+builder.Services.AddOptions<StackLinkOptions>()
+    .Bind(builder.Configuration.GetSection(StackLinkOptions.SectionName))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 // Add response compression
 builder.Services.AddResponseCompression(options =>
 {
