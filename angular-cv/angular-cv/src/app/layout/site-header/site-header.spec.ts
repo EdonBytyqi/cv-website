@@ -23,13 +23,13 @@ describe('SiteHeader', () => {
     await fixture.whenStable();
   }
 
-  it('[AC-003-01] renders a header landmark with the site name and main navigation', () => {
+  it('[004:FR-001] renders a header landmark with the site name and main navigation', () => {
     const landmark = header.querySelector('header')!;
     expect(landmark.textContent).toContain('EDON BYTYQI');
     expect(landmark.querySelector('nav[aria-label="Main navigation"]')).toBeTruthy();
   });
 
-  it('[AC-003-02] toggles aria-expanded on a Menu button that controls the nav list', async () => {
+  it('[004:FR-002] toggles aria-expanded on a Menu button that controls the nav list', async () => {
     expect(menuButton.textContent?.trim()).toBe('Menu');
     expect(menuButton.getAttribute('aria-expanded')).toBe('false');
     const controlled = header.querySelector(`#${menuButton.getAttribute('aria-controls')}`);
@@ -40,7 +40,7 @@ describe('SiteHeader', () => {
     expect(menuButton.getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('[AC-003-03] closes on Escape and returns focus to the Menu button', async () => {
+  it('[004:FR-003] closes on Escape and returns focus to the Menu button', async () => {
     await openMenu();
     header.querySelector<HTMLAnchorElement>('.nav-link')!.focus();
 
@@ -51,7 +51,7 @@ describe('SiteHeader', () => {
     expect(document.activeElement).toBe(menuButton);
   });
 
-  it('[AC-003-10] marks Angular as current and labels where each stack link goes', async () => {
+  it('[004:FR-011] marks Angular as current and labels where each stack link goes', async () => {
     const site = TestBed.inject(CvService).cvData().sidebar;
     fixture.componentRef.setInput('site', {
       ...site,
@@ -77,7 +77,7 @@ describe('SiteHeader', () => {
     }
   });
 
-  it('[AC-003-04] closes when a navigation link is chosen', async () => {
+  it('[004:FR-004] closes when a navigation link is chosen', async () => {
     await openMenu();
 
     header.querySelector<HTMLAnchorElement>('.nav-link')!.click();

@@ -5,7 +5,7 @@ Edon Bytyqi's CV as an ASP.NET Core 10 MVC site with a read-only JSON API.
 ## Getting started
 
 ```bash
-dotnet run --project DotNetCV        # https://localhost:5001 (see launchSettings.json)
+dotnet run --project DotNetCV        # http://localhost:5000 (profiles in launchSettings.json)
 dotnet test                          # unit, integration and spec-coverage tests
 ```
 
@@ -14,9 +14,11 @@ at `/api/docs`.
 
 ## How this project is developed
 
-Behaviour is defined in specs first, then tested, then built. See
-[`specs/README.md`](specs/README.md) for the workflow and
-[`CLAUDE.md`](CLAUDE.md) for code conventions.
+Behaviour is defined in specs first, then tested, then built, using GitHub
+Spec Kit. The shared feature specs live in the repository's root
+[`specs/`](../specs) folder, the rules in the
+[constitution](../.specify/memory/constitution.md), and code conventions in
+[`CLAUDE.md`](CLAUDE.md).
 
 ## Structure
 
@@ -25,8 +27,8 @@ Behaviour is defined in specs first, then tested, then built. See
 | `DotNetCV/Services/CvService.cs` | The CV content, built once and registered as a singleton |
 | `DotNetCV/Models`, `ViewModels` | Immutable content types |
 | `DotNetCV/Controllers` | The CV page (`HomeController`) and `/api/cvapi` |
-| `DotNetCV.Tests/Integration` | In-memory app tests for specs 001 and 002 |
-| `DotNetCV.Tests/Specs` | The spec coverage check |
+| `DotNetCV.Tests/Integration` | In-memory app tests for features 001–004 |
+| `DotNetCV.Tests/Specs` | The spec coverage check against the root `specs/` |
 
 ## Running both versions locally
 

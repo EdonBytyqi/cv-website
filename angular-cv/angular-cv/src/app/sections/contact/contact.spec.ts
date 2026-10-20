@@ -24,14 +24,14 @@ describe('Contact', () => {
     await TestBed.configureTestingModule({ imports: [Contact] }).compileComponents();
   });
 
-  it('[AC-001-09] strips whitespace from the phone link when a number is set', async () => {
+  it('[001:FR-010] strips whitespace from the phone link when a number is set', async () => {
     const section = await render({ ...details, phone: '044 123 45 67' });
     const link = section.querySelector('a[href^="tel:"]');
     expect(link?.getAttribute('href')).toBe('tel:0441234567');
     expect(link?.textContent?.trim()).toBe('044 123 45 67');
   });
 
-  it('[AC-001-11] shows no phone entry when no number is set', async () => {
+  it('[001:FR-011] shows no phone entry when no number is set', async () => {
     const section = await render(details);
     expect(section.querySelector('a[href^="tel:"]')).toBeNull();
     const terms = [...section.querySelectorAll('dt')].map((term) => term.textContent?.trim());

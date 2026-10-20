@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 namespace DotNetCV.Tests.Integration;
 
 /// <summary>
-/// Spec 001: rules that depend on the content (optional phone, ongoing education, stack links).
+/// Rules that depend on the content: optional phone and ongoing education (feature 001), stack links (feature 004).
 /// </summary>
 public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -18,7 +18,7 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
         GitHubUrl = "https://github.com/example"
     };
 
-    [Theory(DisplayName = "[AC-001-08] Shows a phone entry only when a number is set")]
+    [Theory(DisplayName = "[001:FR-011] Shows a phone entry only when a number is set")]
     [InlineData(null, false)]
     [InlineData("044 123 45 67", true)]
     public async Task ShowsPhoneOnlyWhenSet(string? phone, bool expectPhone)
@@ -42,7 +42,7 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
         }
     }
 
-    [Fact(DisplayName = "[AC-001-09] Shows 'since <year>' for ongoing education and the description")]
+    [Fact(DisplayName = "[001:FR-006] Shows 'since <year>' for ongoing education and the description")]
     public async Task ShowsOngoingEducation()
     {
         var cv = CvOverrides.WithParts(education:
@@ -65,7 +65,7 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
         Assert.Contains("Cloud and data courses", educationText);
     }
 
-    [Fact(DisplayName = "[AC-001-10] Marks .NET as current and labels where each stack link goes")]
+    [Fact(DisplayName = "[004:FR-011] Marks .NET as current and labels where each stack link goes")]
     public async Task StackLinksAreLabelled()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -85,7 +85,7 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
         });
     }
 
-    [Theory(DisplayName = "[AC-001-11] Links Angular to the local dev server only in Development")]
+    [Theory(DisplayName = "[004:FR-012] Links Angular to the local dev server only in Development")]
     [InlineData("Development", "http://localhost:4200")]
     [InlineData("Production", "https://edonbytyqi.github.io/cv-website/")]
     public async Task AngularLinkFollowsEnvironment(string environment, string expectedUrl)

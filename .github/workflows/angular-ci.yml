@@ -4,11 +4,13 @@ on:
   pull_request:
     paths:
       - 'angular-cv/**'
+      - 'specs/**'
       - '.github/workflows/angular-*.yml'
   push:
     branches: [main]
     paths:
       - 'angular-cv/**'
+      - 'specs/**'
       - '.github/workflows/angular-*.yml'
 
 permissions:

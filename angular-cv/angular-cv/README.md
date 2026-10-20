@@ -11,9 +11,11 @@ npm start          # http://localhost:4200
 
 ## How this project is developed
 
-Behaviour is defined in specs first, then tested, then built. See
-[`specs/README.md`](specs/README.md) for the workflow and
-[`CLAUDE.md`](CLAUDE.md) for code conventions.
+Behaviour is defined in specs first, then tested, then built, using GitHub
+Spec Kit. The shared feature specs live in the repository's root
+[`specs/`](../../specs) folder, the rules in the
+[constitution](../../.specify/memory/constitution.md), and code conventions in
+[`CLAUDE.md`](CLAUDE.md).
 
 ## Scripts
 
@@ -21,7 +23,7 @@ Behaviour is defined in specs first, then tested, then built. See
 | --- | --- |
 | `npm start` | Dev server with live reload |
 | `npm test` | Unit tests with Vitest (jsdom) |
-| `npm run spec:check` | Checks every tracked acceptance criterion has a test |
+| `npm run spec:check` | Checks every Angular requirement in the root `specs/` has a test |
 | `npm run build` | Production build into `dist/angular-cv/browser` |
 
 ## Running both versions locally

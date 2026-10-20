@@ -37,13 +37,13 @@ describe('Hero', () => {
     await TestBed.configureTestingModule({ imports: [Hero] }).compileComponents();
   });
 
-  it('[AC-003-06] names employer and city when the current role has a location', async () => {
+  it('[004:FR-006] names employer and city when the current role has a location', async () => {
     const text = await heroText(job);
     expect(text).toContain('Software Developer');
     expect(text).toContain('currently at Example AG, Zürich');
   });
 
-  it('[AC-003-06] falls back to the company line when the current role has no location', async () => {
+  it('[004:FR-006] falls back to the company line when the current role has no location', async () => {
     const text = await heroText({ ...job, company: 'AI integration, software development', location: '' });
     expect(text).toContain('currently: AI integration, software development');
   });

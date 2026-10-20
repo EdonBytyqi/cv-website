@@ -43,12 +43,12 @@ describe('Education', () => {
     await TestBed.configureTestingModule({ imports: [Education] }).compileComponents();
   });
 
-  it('[AC-001-06] shows grade and ECTS together as "Grade: x | n ECTS"', async () => {
+  it('[001:FR-007] shows grade and ECTS together as "Grade: x | n ECTS"', async () => {
     const section = await render([degree]);
     expect(cardText(section, degree.degree)).toContain('Grade: 5.2/6 | 180 ECTS');
   });
 
-  it('[AC-001-12] shows "since <year>" for ongoing entries and the description when set', async () => {
+  it('[001:FR-006] shows "since <year>" for ongoing entries and the description when set', async () => {
     const section = await render([degree, courses]);
     const ongoing = cardText(section, courses.degree);
     expect(ongoing).toContain('since 2022');

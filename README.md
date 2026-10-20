@@ -32,27 +32,47 @@ Requirements: Node.js 22 (see `angular-cv/angular-cv/.nvmrc`) and the
 
 ```
 cv-website/
+├── specs/                       Shared Spec Kit features (spec, plan, tasks)
+├── .specify/                    Spec Kit: constitution, templates, scripts
+├── .claude/skills/              /speckit-* commands for Claude Code
 ├── angular-cv/angular-cv/       Angular 22 app
 │   ├── src/app/                 Components per section, CvService (content)
-│   ├── src/environments/        Stack link URLs per build
-│   └── specs/                   Specs and acceptance criteria
+│   └── src/environments/        Stack link URLs per build
 ├── dotnet-cv/
 │   ├── DotNetCV/                ASP.NET Core 10 MVC + read-only JSON API
-│   ├── DotNetCV.Tests/          Unit, integration and spec-coverage tests
-│   └── specs/                   Specs and acceptance criteria
+│   └── DotNetCV.Tests/          Unit, integration and spec-coverage tests
 └── .github/                     CI, deployment and Dependabot
 ```
 
 ## How it's built
 
-Both projects use **spec-driven development**. Every behaviour is described as
-numbered acceptance criteria (`AC-001-04`) in a spec before it's built, and
-every criterion in an approved spec must have a test that names it. A check
-fails the build when one is missing.
+The project uses **spec-driven development with
+[GitHub Spec Kit](https://github.com/github/spec-kit)**. The rules are in the
+[constitution](.specify/memory/constitution.md). Both apps implement the same
+features, so the specs are shared:
+
+| Feature | What it covers |
+| --- | --- |
+| [001 CV content](specs/001-cv-content/spec.md) | Sections, ordering, dates, education, skills, contact |
+| [002 Accessibility](specs/002-accessibility/spec.md) | Skip link, landmarks, alt text, axe-core |
+| [003 API and security](specs/003-api-and-security/spec.md) | JSON API, headers, error handling (.NET only) |
+| [004 Notebook redesign](specs/004-notebook-redesign/spec.md) | Header and menu, hero, cards, reveal, stack switch |
+
+Each feature folder has a `spec.md` (what and why, with `FR-###`
+requirements), a `plan.md` (how, for both apps) and a `tasks.md`. A
+requirement applies to both apps unless marked *(Angular only)* or
+*(.NET only)*.
+
+**New work** starts in Claude Code with `/speckit-specify <description>`, then
+`/speckit-plan`, `/speckit-tasks` and `/speckit-implement`. Optional helpers:
+`/speckit-clarify`, `/speckit-checklist`, `/speckit-analyze`.
+
+**Tests are traceable:** each test's name starts with the requirement it
+covers, e.g. `[001:FR-004]`. Both apps fail their build when a requirement
+that applies to them has no test.
 
 | | Angular | .NET |
 | --- | --- | --- |
-| Workflow | [`specs/README.md`](angular-cv/angular-cv/specs/README.md) | [`specs/README.md`](dotnet-cv/specs/README.md) |
 | Conventions | [`CLAUDE.md`](angular-cv/angular-cv/CLAUDE.md) | [`CLAUDE.md`](dotnet-cv/CLAUDE.md) |
 | Tests | Vitest + jsdom + axe-core (`npm test`) | xUnit + `WebApplicationFactory` + AngleSharp (`dotnet test`) |
 | Spec check | `npm run spec:check` | runs inside `dotnet test` |

@@ -36,13 +36,13 @@ describe('Reveal', () => {
 
   afterEach(() => vi.unstubAllGlobals());
 
-  it('[AC-003-08] leaves content visible when IntersectionObserver is unavailable', async () => {
+  it('[004:FR-008] leaves content visible when IntersectionObserver is unavailable', async () => {
     vi.stubGlobal('IntersectionObserver', undefined);
     const target = await renderTarget();
     expect(target.classList).not.toContain('reveal-pending');
   });
 
-  it('[AC-003-08] leaves content visible when the user prefers reduced motion', async () => {
+  it('[004:FR-008] leaves content visible when the user prefers reduced motion', async () => {
     installObserver();
     prefersReducedMotion(true);
     const target = await renderTarget();
