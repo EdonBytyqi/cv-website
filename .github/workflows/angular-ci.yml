@@ -1,0 +1,48 @@
+name: Angular CI
+
+on:
+  pull_request:
+    paths:
+      - 'angular-cv/**'
+      - '.github/workflows/angular-*.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'angular-cv/**'
+      - '.github/workflows/angular-*.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: angular-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: angular-cv/angular-cv
+
+jobs:
+  verify:
+    name: Spec check, test and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: angular-cv/angular-cv/.nvmrc
+          cache: npm
+          cache-dependency-path: angular-cv/angular-cv/package-lock.json
+
+      - run: npm ci
+
+      - name: Every tracked acceptance criterion has a test
+        run: npm run spec:check
+
+      - name: Unit tests
+        run: npm test -- --watch=false
+
+      - name: Production build
+        run: npm run build
