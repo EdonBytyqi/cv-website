@@ -1,6 +1,5 @@
 using System.Globalization;
 using AngleSharp.Dom;
-using DotNetCV.Services;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace DotNetCV.Tests.Integration;
@@ -10,7 +9,7 @@ namespace DotNetCV.Tests.Integration;
 /// </summary>
 public sealed class CvPageTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
 {
-    private readonly ViewModels.CvViewModel _cv = new CvService().GetCv();
+    private readonly ViewModels.CvViewModel _cv = CvOverrides.RealCv;
 
     [Fact(DisplayName = "[AC-001-01] Has one h1 with the first name and a separately wrapped last name")]
     public async Task HasOneHeadingWithTheName()

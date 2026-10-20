@@ -27,3 +27,16 @@ Behaviour is defined in specs first, then tested, then built. See
 | `DotNetCV/Controllers` | The CV page (`HomeController`) and `/api/cvapi` |
 | `DotNetCV.Tests/Integration` | In-memory app tests for specs 001 and 002 |
 | `DotNetCV.Tests/Specs` | The spec coverage check |
+
+## Running both versions locally
+
+The stack switch links the two versions when both run on your machine:
+
+```bash
+dotnet run --project DotNetCV --launch-profile http   # .NET on http://localhost:5000
+cd ../angular-cv/angular-cv && npm start              # Angular on http://localhost:4200
+```
+
+In Development the Angular button opens `http://localhost:4200`
+(`StackLinks:AngularUrl` in `appsettings.Development.json`); elsewhere it
+opens the live GitHub Pages site.

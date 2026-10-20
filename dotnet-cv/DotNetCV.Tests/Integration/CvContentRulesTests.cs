@@ -1,8 +1,6 @@
 using DotNetCV.Models;
-using DotNetCV.Services;
-using DotNetCV.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNetCV.Tests.Integration;
 
@@ -11,8 +9,6 @@ namespace DotNetCV.Tests.Integration;
 /// </summary>
 public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
 {
-    private static readonly CvViewModel RealCv = new CvService().GetCv();
-
     // Made-up details so these tests never depend on (or leak) real contact data
     private static readonly Contact ExampleContact = new()
     {
@@ -27,7 +23,7 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
     [InlineData("044 123 45 67", true)]
     public async Task ShowsPhoneOnlyWhenSet(string? phone, bool expectPhone)
     {
-        var cv = WithParts(contact: new Contact
+        var cv = CvOverrides.WithParts(contact: new Contact
         {
             Email = ExampleContact.Email,
             Phone = phone,
@@ -36,7 +32,7 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
             GitHubUrl = ExampleContact.GitHubUrl
         });
 
-        var page = await HtmlPage.LoadAsync(WithCv(cv));
+        var page = await HtmlPage.LoadAsync(factory.WithCv(cv));
         var contactText = page.QuerySelector("#contact").Text();
 
         Assert.Equal(expectPhone, contactText.Contains("Phone"));
@@ -49,7 +45,7 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
     [Fact(DisplayName = "[AC-001-09] Shows 'since <year>' for ongoing education and the description")]
     public async Task ShowsOngoingEducation()
     {
-        var cv = WithParts(education:
+        var cv = CvOverrides.WithParts(education:
         [
             new Education
             {
@@ -62,25 +58,21 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
             }
         ]);
 
-        var page = await HtmlPage.LoadAsync(WithCv(cv));
+        var page = await HtmlPage.LoadAsync(factory.WithCv(cv));
         var educationText = page.QuerySelector("#education").Text();
 
         Assert.Contains("since 2022", educationText);
         Assert.Contains("Cloud and data courses", educationText);
     }
 
-    [Fact(DisplayName = "[AC-001-10] Has no localhost stack links and labels where each one goes")]
-    public async Task StackLinksAreSafe()
+    [Fact(DisplayName = "[AC-001-10] Marks .NET as current and labels where each stack link goes")]
+    public async Task StackLinksAreLabelled()
     {
         var page = await HtmlPage.LoadAsync(factory);
 
-        var links = page.QuerySelectorAll(".tech-switch a");
+        var links = page.QuerySelectorAll(".stack-switch a");
         Assert.NotEmpty(links);
-        Assert.All(links, link =>
-        {
-            Assert.DoesNotContain("localhost", link.GetAttribute("href"));
-            Assert.False(string.IsNullOrWhiteSpace(link.GetAttribute("aria-label")));
-        });
+        Assert.All(links, link => Assert.False(string.IsNullOrWhiteSpace(link.GetAttribute("aria-label"))));
 
         var dotNet = Assert.Single(links, link => link.Text() == ".NET");
         Assert.Equal("page", dotNet.GetAttribute("aria-current"));
@@ -93,22 +85,21 @@ public sealed class CvContentRulesTests(WebApplicationFactory<Program> factory) 
         });
     }
 
-    private WebApplicationFactory<Program> WithCv(CvViewModel cv) =>
-        factory.WithWebHostBuilder(builder =>
-            builder.ConfigureServices(services => services.AddSingleton<ICvService>(new FixedCvService(cv))));
-
-    private static CvViewModel WithParts(Contact? contact = null, IReadOnlyList<Education>? education = null) => new()
+    [Theory(DisplayName = "[AC-001-11] Links Angular to the local dev server only in Development")]
+    [InlineData("Development", "http://localhost:4200")]
+    [InlineData("Production", "https://edonbytyqi.github.io/cv-website/")]
+    public async Task AngularLinkFollowsEnvironment(string environment, string expectedUrl)
     {
-        AboutMe = RealCv.AboutMe,
-        Experiences = RealCv.Experiences,
-        Education = education ?? RealCv.Education,
-        SkillCategories = RealCv.SkillCategories,
-        Contact = contact ?? RealCv.Contact,
-        Sidebar = RealCv.Sidebar
-    };
+        using var app = factory.WithWebHostBuilder(builder => builder.UseEnvironment(environment));
 
-    private sealed class FixedCvService(CvViewModel cv) : ICvService
-    {
-        public CvViewModel GetCv() => cv;
+        var page = await HtmlPage.LoadAsync(app);
+        var links = page.QuerySelectorAll(".stack-switch a");
+
+        var angular = Assert.Single(links, link => link.Text() == "Angular");
+        Assert.Equal(expectedUrl, angular.GetAttribute("href"));
+        if (environment != "Development")
+        {
+            Assert.All(links, link => Assert.DoesNotContain("localhost", link.GetAttribute("href")));
+        }
     }
 }

@@ -1,22 +1,25 @@
+using DotNetCV.Configuration;
 using DotNetCV.Models;
 using DotNetCV.ViewModels;
+using Microsoft.Extensions.Options;
 
 namespace DotNetCV.Services;
 
 /// <summary>
-/// Serves the CV content. The content is static, so it is built once and shared.
+/// Serves the CV content. The content is static, so it is built once per (singleton) instance.
 /// </summary>
 /// <remarks>
 /// Content mirrors the CV (translated to English) and the Angular version. This repository
 /// is public: never add a phone number, street address, date of birth or permit details.
 /// </remarks>
-public sealed class CvService : ICvService
+public sealed class CvService(IOptions<StackLinkOptions> stackLinks) : ICvService
 {
-    private static readonly CvViewModel Cv = CreateCv();
+    private readonly CvViewModel _cv = CreateCv(
+        (stackLinks ?? throw new ArgumentNullException(nameof(stackLinks))).Value.AngularUrl);
 
-    public CvViewModel GetCv() => Cv;
+    public CvViewModel GetCv() => _cv;
 
-    private static CvViewModel CreateCv() => new()
+    private static CvViewModel CreateCv(string angularUrl) => new()
     {
         AboutMe = new AboutMe
         {
@@ -245,9 +248,9 @@ public sealed class CvService : ICvService
                 new TechStackItem(".NET", "/", IsActive: true, ".NET version of this CV (this page)", OpensInNewTab: false),
                 new TechStackItem(
                     "Angular",
-                    "https://edonbytyqi.github.io/cv-website/",
+                    angularUrl,
                     IsActive: false,
-                    "Angular version of this CV on GitHub Pages (opens in a new tab)",
+                    "Angular version of this CV (opens in a new tab)",
                     OpensInNewTab: true)
             ],
             SocialLinks =

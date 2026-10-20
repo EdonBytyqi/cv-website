@@ -1,15 +1,16 @@
 using DotNetCV.Services;
+using DotNetCV.Tests.Integration;
 
 namespace DotNetCV.Tests.Services;
 
 public sealed class CvServiceTests
 {
-    private readonly CvService _service = new();
+    private readonly CvService _service = CvOverrides.CreateService();
 
     [Fact]
-    public void GetCv_ReturnsTheSameInstanceEveryTime()
+    public void GetCv_BuildsTheCvOnlyOnce()
     {
-        Assert.Same(_service.GetCv(), new CvService().GetCv());
+        Assert.Same(_service.GetCv(), _service.GetCv());
     }
 
     [Fact]

@@ -31,10 +31,13 @@ Out of scope: visual design (see later specs), the JSON API (spec 002).
 - **AC-001-08** When no phone number is set, the page shows no phone entry.
 - **AC-001-09** An education entry marked as ongoing shows "since <start
   year>", and an entry's description is shown when set.
-- **AC-001-10** The stack links never point to `localhost`. The .NET entry is
-  marked current (`aria-current="page"`). An entry that leads to another site
-  opens in a new tab with `rel="noopener noreferrer"`, and its accessible name
-  says so.
+- **AC-001-10** The .NET entry in the stack switch is marked current
+  (`aria-current="page"`). An entry that leads to another site opens in a new
+  tab with `rel="noopener noreferrer"`, and its accessible name says so.
+- **AC-001-11** In the Development environment, the Angular entry links to the
+  local Angular dev server (`http://localhost:4200`). In other environments
+  it links to the live Angular site and no stack link points to `localhost`.
+  The URL comes from configuration (`StackLinks:AngularUrl`).
 
 ## Content rules
 
