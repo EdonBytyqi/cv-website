@@ -1,50 +1,76 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# CV Website Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Spec First (NON-NEGOTIABLE)
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Every user-visible behaviour is defined in a feature spec under `specs/` before
+it is built, following the Spec Kit flow: `/speckit-specify` → (`/speckit-clarify`)
+→ `/speckit-plan` → `/speckit-tasks` → `/speckit-implement`. Changing behaviour
+means changing the spec first, in the same pull request as the code. A
+requirement is never deleted or weakened just to make a check pass.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Traceable Tests
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+Every functional requirement in a spec with status **Approved** or
+**Implemented** has at least one test per app it applies to. The test name
+starts with the requirement's key, e.g. `[001:FR-004]` (feature number and
+requirement). Tests are written first and must fail before the code exists.
+Coverage gates enforce this in both apps: `npm run spec:check` (Angular) and
+`SpecCoverageTests` inside `dotnet test` (.NET).
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. One CV, Two Implementations
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+The Angular app (`angular-cv/angular-cv`) and the ASP.NET Core app
+(`dotnet-cv`) present the same CV with the same design. Specs are shared:
+a requirement applies to both apps unless it is marked *(Angular only)* or
+*(.NET only)*, and such markers must be justified by a real platform
+difference. CV content is kept identical in both apps.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. Privacy by Default
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+This repository is public. Source, tests, specs and commit history never
+contain a phone number, street address, date of birth, residence permit or
+driving licence. Location stays at city level. Tests use made-up contact data.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Accessible, Fast and Calm UI
+
+Pages meet WCAG 2.2 AA (contrast, focus, landmarks, alt text) and pass axe
+checks. Motion animates only `transform`, `opacity` or `clip-path`, respects
+`prefers-reduced-motion`, and never hides content without a way to reveal it.
+Fonts and assets are self-hosted; no third-party requests.
+
+### VI. Simple, Idiomatic Code
+
+Each app follows its framework's current guidance: Angular 22 (standalone,
+signals, zoneless, `@Service`, native control flow) and the .NET Framework
+Design Guidelines (immutable models, primary constructors, no swallow-and-log
+try/catch). Prefer the simplest solution; remove unused code with approval.
+Project-specific rules live in each app's `CLAUDE.md`.
+
+## Technology Constraints
+
+- **Angular**: Angular 22, TypeScript (strict), Vitest + jsdom + axe-core,
+  deployed to GitHub Pages from `main`.
+- **.NET**: ASP.NET Core 10 MVC, xUnit + `WebApplicationFactory` + AngleSharp,
+  builds with warnings as errors.
+- Locally the apps link to each other through the stack switch
+  (`http://localhost:4200` ↔ `http://localhost:5000`); production builds
+  never link to `localhost`.
+
+## Development Workflow
+
+- One feature per branch and pull request; large changes are split into
+  stacked PRs with small commits.
+- CI must pass before merging: spec coverage, tests and production build for
+  each app touched.
+- Reviews check the change against this constitution and the feature's spec.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes other practices. Amendments are made through a
+pull request that updates this file, bumps the version (semantic versioning:
+MAJOR for removed or redefined principles, MINOR for new principles or
+sections, PATCH for wording) and updates any affected templates or specs.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-10-20 | **Last Amended**: 2026-10-20
