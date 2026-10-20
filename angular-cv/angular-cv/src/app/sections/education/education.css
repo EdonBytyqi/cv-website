@@ -52,6 +52,11 @@ li:nth-child(even) .index-card {
   color: var(--color-ink-muted);
 }
 
+.description {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+}
+
 .results {
   margin-top: 1rem;
   font-family: var(--font-mono);

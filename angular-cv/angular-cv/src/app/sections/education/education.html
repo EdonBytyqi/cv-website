@@ -11,6 +11,9 @@
             <p class="years">{{ entry.years }}</p>
             <h3 class="degree">{{ entry.degree }}</h3>
             <p class="institution">{{ entry.institutionLine }}</p>
+            @if (entry.description) {
+              <p class="description">{{ entry.description }}</p>
+            }
             @if (entry.results) {
               <p class="results">{{ entry.results }}</p>
             }

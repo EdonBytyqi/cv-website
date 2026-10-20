@@ -20,6 +20,7 @@ export class Hero {
   protected readonly currentlyAt = computed(() => {
     const job = this.currentJob();
     if (!job) return null;
+    if (!job.location) return `currently: ${job.company}`;
 
     const city = job.location.split(',')[0];
     return `currently at ${job.company}, ${city}`;
