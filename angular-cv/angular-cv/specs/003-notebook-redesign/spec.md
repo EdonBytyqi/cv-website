@@ -65,17 +65,24 @@ Out of scope:
 - **AC-003-04** Choosing a navigation link closes the menu.
 - **AC-003-05** Each experience entry is labelled with its start year
   (e.g. "2024"), shown separately from the full date range.
-- **AC-003-06** The hero shows the job title and a note naming the current
-  employer and its city, e.g. "currently at BSI SA, Lugano".
+- **AC-003-06** The hero shows the job title and a note about the current
+  role. If the current role has a location, the note reads "currently at
+  <company>, <city>" (e.g. "currently at Example AG, Zürich"). Otherwise it
+  reads "currently: <company line>" (e.g. "currently: AI integration,
+  software development").
 - **AC-003-07** The contact section offers two primary actions: an email link
   and a LinkedIn link.
 - **AC-003-08** Content marked for scroll reveal is visible straight away when
   `IntersectionObserver` is unavailable or the user prefers reduced motion.
 - **AC-003-09** A `footer` landmark contains links to LinkedIn and GitHub.
-- **AC-003-10** The stack switch never links to `localhost`. The Angular entry
-  is marked current (`aria-current="page"`) and links to this site. An entry
-  that leads elsewhere (the .NET source on GitHub) opens in a new tab with
-  `rel="noopener noreferrer"`, and its accessible name says where it goes.
+- **AC-003-10** The Angular entry in the stack switch is marked current
+  (`aria-current="page"`) and links to this site. An entry that leads to
+  another site opens in a new tab with `rel="noopener noreferrer"`, and its
+  accessible name says where it goes.
+- **AC-003-11** In development builds, the .NET entry links to the local .NET
+  dev server (`http://localhost:5000`). In production builds no stack link
+  points to `localhost`, and the .NET entry is hidden until that site is
+  hosted.
 
 ## Manual checks
 

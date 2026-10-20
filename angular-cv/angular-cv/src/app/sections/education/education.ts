@@ -22,8 +22,10 @@ export class Education {
   );
 }
 
-function formatYears({ startDate, endDate }: EducationEntry): string {
+function formatYears({ startDate, endDate, ongoing }: EducationEntry): string {
   const start = startDate.getFullYear();
+  if (ongoing) return `since ${start}`;
+
   const end = endDate?.getFullYear();
   return end && end !== start ? `${start} – ${end}` : `${start}`;
 }

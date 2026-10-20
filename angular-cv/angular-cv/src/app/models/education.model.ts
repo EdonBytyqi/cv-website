@@ -5,6 +5,8 @@ export interface Education {
   location: string;
   startDate: Date;
   endDate?: Date;
+  /** Still in progress; shown as "since <start year>" */
+  ongoing?: boolean;
   grade?: string;
   description?: string;
   certificationType?: string;
