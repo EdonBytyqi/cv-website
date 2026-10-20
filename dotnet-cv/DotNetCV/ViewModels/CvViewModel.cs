@@ -2,12 +2,20 @@ using DotNetCV.Models;
 
 namespace DotNetCV.ViewModels;
 
-public class CvViewModel
+/// <summary>
+/// Everything the CV page shows, in display order.
+/// </summary>
+public sealed class CvViewModel
 {
-    public AboutMe AboutMe { get; set; } = new();
-    public List<Experience> Experiences { get; set; } = new();
-    public List<Education> Education { get; set; } = new();
-    public List<SkillCategory> SkillCategories { get; set; } = new();
-    public Contact Contact { get; set; } = new();
-    public SidebarViewModel Sidebar { get; set; } = new();
+    public required AboutMe AboutMe { get; init; }
+
+    public required IReadOnlyList<Experience> Experiences { get; init; }
+
+    public required IReadOnlyList<Education> Education { get; init; }
+
+    public required IReadOnlyList<SkillCategory> SkillCategories { get; init; }
+
+    public required Contact Contact { get; init; }
+
+    public required SidebarViewModel Sidebar { get; init; }
 }

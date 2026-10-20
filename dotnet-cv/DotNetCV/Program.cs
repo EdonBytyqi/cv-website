@@ -6,18 +6,10 @@ using System.IO.Compression;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure options with validation
-builder.Services.AddOptions<CvOptions>()
-    .Bind(builder.Configuration.GetSection(CvOptions.SectionName))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
-
 builder.Services.AddOptions<CorsOptions>()
     .Bind(builder.Configuration.GetSection(CorsOptions.SectionName))
     .ValidateDataAnnotations()
     .ValidateOnStart();
-
-// Add memory cache
-builder.Services.AddMemoryCache();
 
 // Add response compression
 builder.Services.AddResponseCompression(options =>
@@ -88,8 +80,8 @@ builder.Services.AddSwaggerGen(options =>
     }
 });
 
-// Register CV service with caching
-builder.Services.AddScoped<ICvService, CvServiceWithCaching>();
+// The CV content never changes at runtime, so one shared instance is enough
+builder.Services.AddSingleton<ICvService, CvService>();
 
 var app = builder.Build();
 
@@ -119,12 +111,9 @@ app.Use(async (context, next) =>
     // Prevent MIME type sniffing
     context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
 
-    // XSS Protection
-    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
-
     // Content Security Policy
     context.Response.Headers.Append("Content-Security-Policy",
-        "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:");
+        "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; frame-ancestors 'none'");
 
     // Referrer Policy
     context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");

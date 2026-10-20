@@ -1,33 +1,25 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace DotNetCV.Models;
 
 /// <summary>
-/// Represents personal information about the CV owner
+/// Personal information about the CV owner.
 /// </summary>
 public sealed class AboutMe
 {
-    [Key]
-    public int Id { get; set; }
+    public required string FullName { get; init; }
 
-    [Required]
-    [StringLength(100, MinimumLength = 2)]
-    public string FullName { get; set; } = string.Empty;
+    public required string Title { get; init; }
 
-    [Required]
-    [StringLength(100)]
-    public string Title { get; set; } = string.Empty;
+    public required string Bio { get; init; }
 
-    [Required]
-    [StringLength(1000)]
-    public string Bio { get; set; } = string.Empty;
+    public required string ProfileImageUrl { get; init; }
 
-    [Required]
-    [Url]
-    [StringLength(500)]
-    public string ProfileImageUrl { get; set; } = string.Empty;
+    /// <summary>
+    /// The first word of <see cref="FullName"/>.
+    /// </summary>
+    public string FirstName => FullName.Split(' ', 2)[0];
 
-    public DateTime CreatedAt { get; set; }
-
-    public DateTime UpdatedAt { get; set; }
+    /// <summary>
+    /// Everything after the first word of <see cref="FullName"/>, or an empty string.
+    /// </summary>
+    public string LastName => FullName.Split(' ', 2) is [_, var rest] ? rest : string.Empty;
 }

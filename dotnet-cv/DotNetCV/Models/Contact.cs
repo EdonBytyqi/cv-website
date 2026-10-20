@@ -1,12 +1,19 @@
 namespace DotNetCV.Models;
 
-public class Contact
+/// <summary>
+/// Public contact details.
+/// </summary>
+public sealed class Contact
 {
-    public int Id { get; set; }
-    public string Email { get; set; } = string.Empty;
-    public string Phone { get; set; } = string.Empty;
-    public string Location { get; set; } = string.Empty;
-    public string LinkedInUrl { get; set; } = string.Empty;
-    public string GitHubUrl { get; set; } = string.Empty;
-    public string? WebsiteUrl { get; set; }
+    public required string Email { get; init; }
+
+    public string? Phone { get; init; }
+
+    public required string Location { get; init; }
+
+    public required string LinkedInUrl { get; init; }
+
+    public required string GitHubUrl { get; init; }
+
+    public string? WebsiteUrl { get; init; }
 }

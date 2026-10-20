@@ -1,15 +1,14 @@
-using DotNetCV.Models;
 using DotNetCV.ViewModels;
 
 namespace DotNetCV.Services;
 
+/// <summary>
+/// Provides the CV content.
+/// </summary>
 public interface ICvService
 {
-    Task<AboutMe> GetAboutMeAsync();
-    Task<List<Experience>> GetExperiencesAsync();
-    Task<List<Education>> GetEducationAsync();
-    Task<List<SkillCategory>> GetSkillCategoriesAsync();
-    Task<Contact> GetContactAsync();
-    Task<SidebarViewModel> GetSidebarAsync();
-    Task<CvViewModel> GetCompleteCvAsync();
+    /// <summary>
+    /// Gets the complete CV, with every list already in display order.
+    /// </summary>
+    CvViewModel GetCv();
 }
