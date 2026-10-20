@@ -65,8 +65,11 @@ Out of scope:
 - **AC-003-04** Choosing a navigation link closes the menu.
 - **AC-003-05** Each experience entry is labelled with its start year
   (e.g. "2024"), shown separately from the full date range.
-- **AC-003-06** The hero shows the job title and a note naming the current
-  employer and its city, e.g. "currently at BSI SA, Lugano".
+- **AC-003-06** The hero shows the job title and a note about the current
+  role. If the current role has a location, the note reads "currently at
+  <company>, <city>" (e.g. "currently at Example AG, Zürich"). Otherwise it
+  reads "currently: <company line>" (e.g. "currently: AI integration,
+  software development").
 - **AC-003-07** The contact section offers two primary actions: an email link
   and a LinkedIn link.
 - **AC-003-08** Content marked for scroll reveal is visible straight away when

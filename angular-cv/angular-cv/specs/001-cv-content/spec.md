@@ -30,7 +30,7 @@ Out of scope:
 - **AC-001-05** Each experience entry has a `time` element whose `datetime`
   is the ISO start date.
 - **AC-001-06** An education entry with both a grade and ECTS shows them as
-  "Grade: 7.69/10 | 180 ECTS".
+  "Grade: 5.2/6 | 180 ECTS".
 - **AC-001-07** Skills are grouped under one heading per category, and every
   skill from `CvService` is shown.
 - **AC-001-08** The email link has `href` `mailto:<email>`.
@@ -39,6 +39,16 @@ Out of scope:
 - **AC-001-10** Each line of the postal address is rendered on its own line.
 - **AC-001-11** When no phone number is set in `CvService`, the page shows no
   phone entry and no `tel:` link. AC-001-09 applies only when a number is set.
+- **AC-001-12** An education entry marked as ongoing shows "since <start
+  year>" instead of a year range, and an entry's description is shown when
+  set.
+
+## Content rules
+
+- Content mirrors the latest CV, translated to English.
+- The repository is public. Never put a phone number, street address, date
+  of birth, residence permit or driving licence in source, tests or specs.
+  Location stays at city level.
 
 ## Manual checks
 
