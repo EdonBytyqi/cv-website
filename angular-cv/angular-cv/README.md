@@ -1,59 +1,25 @@
-# AngularCv
+# Angular CV
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.8.
+Edon Bytyqi's CV as a single-page Angular 22 app.
 
-## Development server
-
-To start a local development server, run:
+## Getting started
 
 ```bash
-ng serve
+npm ci
+npm start          # http://localhost:4200
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## How this project is developed
 
-## Code scaffolding
+Behaviour is defined in specs first, then tested, then built. See
+[`specs/README.md`](specs/README.md) for the workflow and
+[`CLAUDE.md`](CLAUDE.md) for code conventions.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Scripts
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Command | Purpose |
+| --- | --- |
+| `npm start` | Dev server with live reload |
+| `npm test` | Unit tests with Vitest (jsdom) |
+| `npm run spec:check` | Checks every tracked acceptance criterion has a test |
+| `npm run build` | Production build into `dist/angular-cv/browser` |

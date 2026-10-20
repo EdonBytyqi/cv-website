@@ -365,6 +365,7 @@
 
 /* Timeline */
 .timeline {
+  list-style: none;
   position: relative;
   padding-left: 2rem;
 }
