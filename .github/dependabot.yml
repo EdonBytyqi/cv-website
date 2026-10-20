@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /angular-cv/angular-cv
+    schedule:
+      interval: weekly
+    groups:
+      # Angular packages must move together, so update them in one PR
+      angular:
+        patterns:
+          - '@angular/*'
+          - '@angular-devkit/*'
+      dev-tooling:
+        dependency-type: development
+        exclude-patterns:
+          - '@angular/*'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
