@@ -5,16 +5,19 @@ and AngleSharp.
 
 ## Spec-driven workflow (required)
 
-Read [`specs/README.md`](specs/README.md) before changing behaviour.
+This repo uses GitHub Spec Kit. Follow the constitution
+(`/.specify/memory/constitution.md`) and the shared feature specs in the
+repository's root `specs/` folder (both apps implement the same features).
 
-1. New or changed behaviour starts as a spec in `specs/NNN-name/spec.md`.
-2. Tests name the criterion in their display name:
-   `[Fact(DisplayName = "[AC-001-04] ...")]`.
-3. Code is written to make those tests pass.
-4. `dotnet build` (no warnings) and `dotnet test` must pass before a PR;
-   `SpecCoverageTests` enforces step 2.
+1. New or changed behaviour starts with `/speckit-specify`, then
+   `/speckit-plan`, `/speckit-tasks` and `/speckit-implement`.
+2. Tests name the requirement in their display name:
+   `[Fact(DisplayName = "[001:FR-004] ...")]` (feature number and requirement).
+3. Requirements apply to both apps unless marked *(Angular only)* or
+   *(.NET only)*; `SpecCoverageTests` enforces the ones that apply here.
+4. `dotnet build` (no warnings) and `dotnet test` must pass before a PR.
 
-Do not edit or delete acceptance criteria just to make a check pass.
+Do not edit or delete requirements just to make a check pass.
 
 ## Code conventions
 

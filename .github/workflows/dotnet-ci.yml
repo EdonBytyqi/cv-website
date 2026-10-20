@@ -4,11 +4,13 @@ on:
   pull_request:
     paths:
       - 'dotnet-cv/**'
+      - 'specs/**'
       - '.github/workflows/dotnet-ci.yml'
   push:
     branches: [main]
     paths:
       - 'dotnet-cv/**'
+      - 'specs/**'
       - '.github/workflows/dotnet-ci.yml'
 
 permissions:

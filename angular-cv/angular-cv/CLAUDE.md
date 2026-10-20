@@ -5,14 +5,19 @@ with Vitest.
 
 ## Spec-driven workflow (required)
 
-Read [`specs/README.md`](specs/README.md) before changing behaviour.
+This repo uses GitHub Spec Kit. Follow the constitution
+(`/.specify/memory/constitution.md`) and the shared feature specs in the
+repository's root `specs/` folder (both apps implement the same features).
 
-1. New or changed behaviour starts as a spec in `specs/NNN-name/spec.md`.
-2. Tests name the criterion they cover: `it('[AC-001-03] ...')`.
-3. Code is written to make those tests pass.
+1. New or changed behaviour starts with `/speckit-specify`, then
+   `/speckit-plan`, `/speckit-tasks` and `/speckit-implement`.
+2. Tests name the requirement they cover: `it('[001:FR-004] ...')`
+   (feature number and requirement).
+3. Requirements apply to both apps unless marked *(Angular only)* or
+   *(.NET only)*; `npm run spec:check` enforces the ones that apply here.
 4. `npm run spec:check && npm test && npm run build` must pass before a PR.
 
-Do not edit or delete acceptance criteria just to make a check pass.
+Do not edit or delete requirements just to make a check pass.
 
 ## Commands
 
@@ -20,7 +25,7 @@ Do not edit or delete acceptance criteria just to make a check pass.
 | --- | --- |
 | `npm start` | Dev server on http://localhost:4200 |
 | `npm test` | Vitest unit tests (jsdom, no browser needed) |
-| `npm run spec:check` | Every tracked acceptance criterion has a test |
+| `npm run spec:check` | Every Angular requirement in `specs/` has a test |
 | `npm run build` | Production build into `dist/angular-cv/browser` |
 
 ## Code conventions
@@ -40,5 +45,5 @@ Do not edit or delete acceptance criteria just to make a check pass.
 
 ## Accessibility
 
-Must pass axe and WCAG 2.2 AA (see spec 002). Animate only `transform` and
+Must pass axe and WCAG 2.2 AA (see `specs/002-accessibility`). Animate only `transform` and
 `opacity`, and respect `prefers-reduced-motion`.
