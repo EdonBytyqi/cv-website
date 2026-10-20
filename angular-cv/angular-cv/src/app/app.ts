@@ -1,16 +1,14 @@
-import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { DatePipe, NgOptimizedImage } from '@angular/common';
 import { CvService } from './services/cv.service';
 
 @Component({
   selector: 'app-root',
   imports: [DatePipe, NgOptimizedImage],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
-  // OnPush is not the default until Angular v22; keep it explicit while on v19
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './app.html',
+  styleUrl: './app.css'
 })
-export class AppComponent {
+export class App {
   private readonly cvService = inject(CvService);
 
   protected readonly cvData = this.cvService.cvData;
