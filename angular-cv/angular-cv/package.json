@@ -17,6 +17,9 @@
     "@angular/forms": "^22.2.3",
     "@angular/platform-browser": "^22.2.3",
     "@angular/router": "^22.2.3",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/source-serif-4": "^5.3.1",
+    "@fontsource/caveat": "^5.3.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

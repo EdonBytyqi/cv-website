@@ -25,6 +25,9 @@
               "src/assets"
             ],
             "styles": [
+              "@fontsource-variable/source-serif-4/opsz.css",
+              "@fontsource-variable/jetbrains-mono/wght.css",
+              "@fontsource/caveat/600.css",
               "src/styles.css"
             ],
             "scripts": []
