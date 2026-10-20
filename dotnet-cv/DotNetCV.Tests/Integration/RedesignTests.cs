@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 namespace DotNetCV.Tests.Integration;
 
 /// <summary>
-/// Spec 003: the notebook redesign.
+/// Feature 004 (specs/004-notebook-redesign) and the skip link and photo checks from feature 002.
 /// </summary>
 public sealed class RedesignTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -17,7 +17,7 @@ public sealed class RedesignTests(WebApplicationFactory<Program> factory) : ICla
         StartDate = new DateOnly(2024, 1, 1)
     };
 
-    [Fact(DisplayName = "[AC-003-01] Starts with a skip link that targets main")]
+    [Fact(DisplayName = "[002:FR-001] Starts with a skip link that targets main")]
     public async Task StartsWithSkipLink()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -28,7 +28,7 @@ public sealed class RedesignTests(WebApplicationFactory<Program> factory) : ICla
         Assert.Equal("MAIN", target?.TagName);
     }
 
-    [Fact(DisplayName = "[AC-003-02] Has a header landmark with the site name and main navigation")]
+    [Fact(DisplayName = "[004:FR-001] Has a header landmark with the site name and main navigation")]
     public async Task HasHeaderWithNavigation()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -39,7 +39,7 @@ public sealed class RedesignTests(WebApplicationFactory<Program> factory) : ICla
         Assert.NotNull(header.QuerySelector("nav[aria-label='Main navigation']"));
     }
 
-    [Fact(DisplayName = "[AC-003-03] Renders a collapsed Menu button that controls the navigation list")]
+    [Fact(DisplayName = "[004:FR-002] Renders a collapsed Menu button that controls the navigation list")]
     public async Task RendersMenuButton()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -51,7 +51,7 @@ public sealed class RedesignTests(WebApplicationFactory<Program> factory) : ICla
         Assert.NotNull(list?.Closest("nav"));
     }
 
-    [Theory(DisplayName = "[AC-003-04] Shows the job title and a note about the current role")]
+    [Theory(DisplayName = "[004:FR-006] Shows the job title and a note about the current role")]
     [InlineData("Zürich, Switzerland", "currently at Example AG, Zürich")]
     [InlineData("", "currently: Example AG")]
     public async Task ShowsCurrentRoleNote(string location, string expectedNote)
@@ -71,7 +71,7 @@ public sealed class RedesignTests(WebApplicationFactory<Program> factory) : ICla
         Assert.Contains(expectedNote, heroText);
     }
 
-    [Fact(DisplayName = "[AC-003-05] Shows the hero photo as an img with the full name in its alt text")]
+    [Fact(DisplayName = "[002:FR-003] Shows the hero photo as an img with the full name in its alt text")]
     public async Task ShowsHeroPhoto()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -80,7 +80,7 @@ public sealed class RedesignTests(WebApplicationFactory<Program> factory) : ICla
         Assert.Contains(CvOverrides.RealCv.AboutMe.FullName, photo?.GetAttribute("alt"));
     }
 
-    [Fact(DisplayName = "[AC-003-06] Labels each experience entry with its start year")]
+    [Fact(DisplayName = "[004:FR-005] Labels each experience entry with its start year")]
     public async Task LabelsExperienceYears()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -96,7 +96,7 @@ public sealed class RedesignTests(WebApplicationFactory<Program> factory) : ICla
         }
     }
 
-    [Fact(DisplayName = "[AC-003-07] Offers email and LinkedIn as the two ways to get in touch")]
+    [Fact(DisplayName = "[004:FR-007] Offers email and LinkedIn as the two ways to get in touch")]
     public async Task OffersTwoWaysIn()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -106,7 +106,7 @@ public sealed class RedesignTests(WebApplicationFactory<Program> factory) : ICla
         Assert.NotNull(page.QuerySelector($"#contact a.button[href='{contact.LinkedInUrl}']"));
     }
 
-    [Fact(DisplayName = "[AC-003-08] Has a footer landmark linking to LinkedIn and GitHub")]
+    [Fact(DisplayName = "[004:FR-009] Has a footer landmark linking to LinkedIn and GitHub")]
     public async Task HasFooterLinks()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -117,7 +117,7 @@ public sealed class RedesignTests(WebApplicationFactory<Program> factory) : ICla
         Assert.NotNull(footer.QuerySelector("a[href*='github.com']"));
     }
 
-    [Fact(DisplayName = "[AC-003-09] Loads every stylesheet, script and font from the site itself")]
+    [Fact(DisplayName = "[004:FR-010] Loads every stylesheet, script and font from the site itself")]
     public async Task LoadsOnlyOwnAssets()
     {
         using var client = factory.CreateClient();

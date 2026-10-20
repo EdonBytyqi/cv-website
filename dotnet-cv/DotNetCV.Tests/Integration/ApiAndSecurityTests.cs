@@ -9,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 namespace DotNetCV.Tests.Integration;
 
 /// <summary>
-/// Spec 002: JSON API, health endpoint, headers and error handling.
+/// Feature 003 (specs/003-api-and-security): JSON API, health endpoint, headers and error handling.
 /// </summary>
 public sealed class ApiAndSecurityTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
 {
-    [Fact(DisplayName = "[AC-002-01] Returns every CV section as JSON")]
+    [Fact(DisplayName = "[003:FR-001] Returns every CV section as JSON")]
     public async Task ReturnsCompleteCv()
     {
         using var client = factory.CreateClient();
@@ -26,7 +26,7 @@ public sealed class ApiAndSecurityTests(WebApplicationFactory<Program> factory) 
         }
     }
 
-    [Fact(DisplayName = "[AC-002-02] Rejects writes to the read-only API")]
+    [Fact(DisplayName = "[003:FR-002] Rejects writes to the read-only API")]
     public async Task RejectsPost()
     {
         using var client = factory.CreateClient();
@@ -36,7 +36,7 @@ public sealed class ApiAndSecurityTests(WebApplicationFactory<Program> factory) 
         Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
     }
 
-    [Fact(DisplayName = "[AC-002-03] Sends security headers on pages")]
+    [Fact(DisplayName = "[003:FR-003] Sends security headers on pages")]
     public async Task SendsSecurityHeaders()
     {
         using var client = factory.CreateClient();
@@ -48,7 +48,7 @@ public sealed class ApiAndSecurityTests(WebApplicationFactory<Program> factory) 
         Assert.NotEmpty(response.Headers.GetValues("Referrer-Policy"));
     }
 
-    [Fact(DisplayName = "[AC-002-04] Reports healthy")]
+    [Fact(DisplayName = "[003:FR-004] Reports healthy")]
     public async Task ReportsHealthy()
     {
         using var client = factory.CreateClient();
@@ -58,7 +58,7 @@ public sealed class ApiAndSecurityTests(WebApplicationFactory<Program> factory) 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
-    [Theory(DisplayName = "[AC-002-05] Hides exception details when the CV service fails")]
+    [Theory(DisplayName = "[003:FR-005] Hides exception details when the CV service fails")]
     [InlineData("/")]
     [InlineData("/api/cvapi")]
     public async Task HidesExceptionDetails(string path)

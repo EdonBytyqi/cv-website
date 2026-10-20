@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc.Testing;
 namespace DotNetCV.Tests.Integration;
 
 /// <summary>
-/// Spec 001: the rendered CV page.
+/// Feature 001 (specs/001-cv-content): the rendered CV page.
 /// </summary>
 public sealed class CvPageTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly ViewModels.CvViewModel _cv = CvOverrides.RealCv;
 
-    [Fact(DisplayName = "[AC-001-01] Has one h1 with the first name and a separately wrapped last name")]
+    [Fact(DisplayName = "[001:FR-001] Has one h1 with the first name and a separately wrapped last name")]
     public async Task HasOneHeadingWithTheName()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -21,7 +21,7 @@ public sealed class CvPageTests(WebApplicationFactory<Program> factory) : IClass
         Assert.Contains(heading.Children, child => child.Text() == _cv.AboutMe.LastName);
     }
 
-    [Theory(DisplayName = "[AC-001-02] Has a section with an h2 for every CV area")]
+    [Theory(DisplayName = "[001:FR-002] Has a section with an h2 for every CV area")]
     [InlineData("about")]
     [InlineData("experience")]
     [InlineData("education")]
@@ -36,7 +36,7 @@ public sealed class CvPageTests(WebApplicationFactory<Program> factory) : IClass
         Assert.NotNull(section.QuerySelector("h2"));
     }
 
-    [Fact(DisplayName = "[AC-001-03] Only links the main navigation to elements that exist")]
+    [Fact(DisplayName = "[001:FR-003] Only links the main navigation to elements that exist")]
     public async Task NavigationTargetsExist()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -46,7 +46,7 @@ public sealed class CvPageTests(WebApplicationFactory<Program> factory) : IClass
         Assert.All(links, link => Assert.NotNull(page.GetElementById(link.GetAttribute("href")![1..])));
     }
 
-    [Fact(DisplayName = "[AC-001-04] Lists experience newest first with an English 'Present' range")]
+    [Fact(DisplayName = "[001:FR-004] Lists experience newest first with an English 'Present' range")]
     public async Task ListsExperienceNewestFirst()
     {
         var originalCulture = CultureInfo.DefaultThreadCurrentCulture;
@@ -68,7 +68,7 @@ public sealed class CvPageTests(WebApplicationFactory<Program> factory) : IClass
         }
     }
 
-    [Fact(DisplayName = "[AC-001-05] Shows a year range only when the end year differs")]
+    [Fact(DisplayName = "[001:FR-006] Shows a year range only when the end year differs")]
     public async Task ShowsEducationYears()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -83,7 +83,7 @@ public sealed class CvPageTests(WebApplicationFactory<Program> factory) : IClass
         }
     }
 
-    [Fact(DisplayName = "[AC-001-06] Shows every skill under its category heading")]
+    [Fact(DisplayName = "[001:FR-008] Shows every skill under its category heading")]
     public async Task GroupsSkillsByCategory()
     {
         var page = await HtmlPage.LoadAsync(factory);
@@ -97,7 +97,7 @@ public sealed class CvPageTests(WebApplicationFactory<Program> factory) : IClass
         }
     }
 
-    [Fact(DisplayName = "[AC-001-07] Links the email address with mailto:")]
+    [Fact(DisplayName = "[001:FR-009] Links the email address with mailto:")]
     public async Task LinksEmail()
     {
         var page = await HtmlPage.LoadAsync(factory);

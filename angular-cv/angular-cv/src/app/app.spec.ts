@@ -27,8 +27,8 @@ describe('App', () => {
     page = await render();
   });
 
-  describe('spec 001 — CV content', () => {
-    it('[AC-001-01] has one h1 with the first name and a separately wrapped last name', () => {
+  describe('001 — CV content', () => {
+    it('[001:FR-001] has one h1 with the first name and a separately wrapped last name', () => {
       const headings = page.querySelectorAll('h1');
       expect(headings.length).toBe(1);
       expect(text(headings[0])).toContain('Edon');
@@ -36,7 +36,7 @@ describe('App', () => {
       expect(lastName).toBeTruthy();
     });
 
-    it('[AC-001-02] has a section with an h2 for every CV area', () => {
+    it('[001:FR-002] has a section with an h2 for every CV area', () => {
       for (const id of ['about', 'experience', 'education', 'skills', 'contact']) {
         const section = page.querySelector(`section#${id}`);
         expect(section, `section #${id}`).toBeTruthy();
@@ -44,7 +44,7 @@ describe('App', () => {
       }
     });
 
-    it('[AC-001-03] only links the main navigation to elements that exist', () => {
+    it('[001:FR-003] only links the main navigation to elements that exist', () => {
       const links = [...page.querySelectorAll<HTMLAnchorElement>('nav a[href^="#"]')];
       expect(links.length).toBeGreaterThan(0);
       for (const link of links) {
@@ -53,21 +53,21 @@ describe('App', () => {
       }
     });
 
-    it('[AC-001-04] lists experience newest first and shows "Present" for the current job', () => {
+    it('[001:FR-004] lists experience newest first and shows "Present" for the current job', () => {
       const entries = page.querySelectorAll('#experience article');
       expect(entries.length).toBe(cv.experiences.length);
       expect(text(entries[0])).toContain(cv.experiences[0].jobTitle);
       expect(text(entries[0].querySelector('time'))).toMatch(new RegExp(`${monthYear(cv.experiences[0].startDate)}\\s*[-–]\\s*Present`));
     });
 
-    it('[AC-001-05] gives every experience entry a time element with the ISO start date', () => {
+    it('[001:FR-005] gives every experience entry a time element with the ISO start date', () => {
       const times = page.querySelectorAll('#experience article time');
       cv.experiences.forEach((experience, index) => {
         expect(times[index].getAttribute('datetime')).toBe(experience.startDate.toISOString());
       });
     });
 
-    it('[AC-001-07] groups every skill under a heading for its category', () => {
+    it('[001:FR-008] groups every skill under a heading for its category', () => {
       const skills = page.querySelector('#skills')!;
       for (const category of cv.skillCategories) {
         const heading = [...skills.querySelectorAll('h3')].find((h) => text(h) === category.categoryName);
@@ -78,11 +78,11 @@ describe('App', () => {
       }
     });
 
-    it('[AC-001-08] links the email address with mailto:', () => {
+    it('[001:FR-009] links the email address with mailto:', () => {
       expect(page.querySelector(`a[href="mailto:${cv.contact.email}"]`)).toBeTruthy();
     });
 
-    it('[AC-001-10] renders each address line on its own line', () => {
+    it('[001:FR-012] renders each address line on its own line', () => {
       const lines = cv.contact.fullAddress!.split('\n');
       const address = [...page.querySelectorAll('#contact p, #contact address')]
         .find((el) => text(el).includes(lines[0]))!;
@@ -91,49 +91,49 @@ describe('App', () => {
     });
   });
 
-  describe('spec 002 — accessibility', () => {
-    it('[AC-002-01] starts with a skip link that targets main', () => {
+  describe('002 — accessibility', () => {
+    it('[002:FR-001] starts with a skip link that targets main', () => {
       const firstFocusable = page.querySelector('a[href], button, input, [tabindex]:not([tabindex="-1"])');
       expect(text(firstFocusable)).toBe('Skip to content');
       const targetId = firstFocusable!.getAttribute('href')!.slice(1);
       expect(page.querySelector(`main#${targetId}`)).toBeTruthy();
     });
 
-    it('[AC-002-02] has a labelled nav landmark', () => {
+    it('[002:FR-002] has a labelled nav landmark', () => {
       const nav = page.querySelector('nav');
       expect(nav?.getAttribute('aria-label') || nav?.getAttribute('aria-labelledby')).toBeTruthy();
     });
 
-    it('[AC-002-03] gives every image alt text and names Edon in the hero photo', () => {
+    it('[002:FR-003] gives every image alt text and names Edon in the hero photo', () => {
       const images = [...page.querySelectorAll('img')];
       expect(images.length).toBeGreaterThan(0);
       for (const image of images) expect(image.hasAttribute('alt')).toBe(true);
       expect(images.some((image) => image.alt.includes(cv.aboutMe.fullName))).toBe(true);
     });
 
-    it('[AC-002-04] protects and names links that open a new tab', () => {
+    it('[002:FR-004] protects and names links that open a new tab', () => {
       for (const link of page.querySelectorAll('a[target="_blank"]')) {
         expect(link.getAttribute('rel')).toContain('noopener');
         expect(link.getAttribute('aria-label') || text(link)).toBeTruthy();
       }
     });
 
-    it('[AC-002-05] never skips a heading level going down', () => {
+    it('[002:FR-005] never skips a heading level going down', () => {
       const levels = [...page.querySelectorAll('h1, h2, h3, h4, h5, h6')].map((h) => Number(h.tagName[1]));
       levels.forEach((level, index) => {
         if (index > 0) expect(level - levels[index - 1]).toBeLessThanOrEqual(1);
       });
     });
 
-    it('[AC-002-06] has no axe-core violations', async () => {
+    it('[002:FR-006] has no axe-core violations', async () => {
       const results = await axe.run(page, { rules: { 'color-contrast': { enabled: false } } });
       const summary = results.violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`);
       expect(summary).toEqual([]);
     });
   });
 
-  describe('spec 003 — notebook redesign', () => {
-    it('[AC-003-05] labels each experience entry with its start year', () => {
+  describe('004 — notebook redesign', () => {
+    it('[004:FR-005] labels each experience entry with its start year', () => {
       const entries = [...page.querySelectorAll('#experience article')];
       cv.experiences.forEach((experience, index) => {
         const year = String(experience.startDate.getFullYear());
@@ -143,13 +143,13 @@ describe('App', () => {
       });
     });
 
-    it('[AC-003-07] offers email and LinkedIn as the two ways to get in touch', () => {
+    it('[004:FR-007] offers email and LinkedIn as the two ways to get in touch', () => {
       const contact = page.querySelector('#contact')!;
       expect(contact.querySelector(`a.button[href="mailto:${cv.contact.email}"]`)).toBeTruthy();
       expect(contact.querySelector(`a.button[href="${cv.contact.linkedInUrl}"]`)).toBeTruthy();
     });
 
-    it('[AC-003-09] has a footer landmark linking to LinkedIn and GitHub', () => {
+    it('[004:FR-009] has a footer landmark linking to LinkedIn and GitHub', () => {
       const footer = page.querySelector('footer')!;
       expect(footer.closest('main')).toBeNull();
       expect(footer.querySelector('a[href*="linkedin.com"]')).toBeTruthy();

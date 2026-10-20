@@ -9,7 +9,7 @@ function stackLinks(dotnetCvUrl: string | null) {
 }
 
 describe('CvService', () => {
-  it('[AC-003-11] links .NET to the local dev server in development builds', () => {
+  it('[004:FR-012] links .NET to the local dev server in development builds', () => {
     expect(development.dotnetCvUrl).toBe('http://localhost:5000');
 
     const dotnet = stackLinks(development.dotnetCvUrl).find((item) => item.label === '.NET');
@@ -19,7 +19,7 @@ describe('CvService', () => {
     expect(dotnet?.description).toContain('opens in a new tab');
   });
 
-  it('[AC-003-11] hides .NET and never links to localhost in production builds', () => {
+  it('[004:FR-012] hides .NET and never links to localhost in production builds', () => {
     expect(production.dotnetCvUrl).toBeNull();
 
     const links = stackLinks(production.dotnetCvUrl);
