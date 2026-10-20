@@ -75,10 +75,15 @@ Out of scope:
 - **AC-003-08** Content marked for scroll reveal is visible straight away when
   `IntersectionObserver` is unavailable or the user prefers reduced motion.
 - **AC-003-09** A `footer` landmark contains links to LinkedIn and GitHub.
-- **AC-003-10** The stack switch never links to `localhost`. The Angular entry
-  is marked current (`aria-current="page"`) and links to this site. An entry
-  that leads elsewhere (the .NET source on GitHub) opens in a new tab with
-  `rel="noopener noreferrer"`, and its accessible name says where it goes.
+- **AC-003-10** The Angular entry in the stack switch is marked current
+  (`aria-current="page"`) and links to this site. An entry that leads to
+  another site opens in a new tab with `rel="noopener noreferrer"`, and its
+  accessible name says where it goes.
+- **AC-003-11** In development builds, the .NET entry links to the local .NET
+  dev server (`http://localhost:5000`). In production builds no stack link
+  points to `localhost`, and the .NET entry is hidden until that site is
+  hosted.
+
 
 ## Manual checks
 
