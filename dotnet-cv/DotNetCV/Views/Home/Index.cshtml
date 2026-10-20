@@ -67,7 +67,7 @@
             {
                 <div class="education-card">
                     <div class="edu-year">
-                        @edu.StartDate.Year@(edu.EndDate is { } end && end.Year != edu.StartDate.Year ? $" - {end.Year}" : "")
+                        @edu.YearRange
                     </div>
                     <h3>@edu.Degree</h3>
                     <p>@edu.Institution@(string.IsNullOrEmpty(edu.Location) ? "" : ", " + edu.Location)</p>
@@ -116,13 +116,16 @@
                     <p><a href="mailto:@Model.Contact.Email">@Model.Contact.Email</a></p>
                 </div>
             </div>
-            <div class="contact-item">
-                <div class="contact-icon">📱</div>
-                <div class="contact-info">
-                    <h4>Phone</h4>
-                    <p>@Model.Contact.Phone</p>
+            @if (!string.IsNullOrWhiteSpace(Model.Contact.Phone))
+            {
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-info">
+                        <h4>Phone</h4>
+                        <p>@Model.Contact.Phone</p>
+                    </div>
                 </div>
-            </div>
+            }
             <div class="contact-item">
                 <div class="contact-icon">📍</div>
                 <div class="contact-info">

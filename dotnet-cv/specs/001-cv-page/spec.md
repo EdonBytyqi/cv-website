@@ -28,6 +28,21 @@ Out of scope: visual design (see later specs), the JSON API (spec 002).
   only when the end year differs.
 - **AC-001-06** Every skill is shown under a heading for its category.
 - **AC-001-07** The email address is a `mailto:` link.
+- **AC-001-08** When no phone number is set, the page shows no phone entry.
+- **AC-001-09** An education entry marked as ongoing shows "since <start
+  year>", and an entry's description is shown when set.
+- **AC-001-10** The stack links never point to `localhost`. The .NET entry is
+  marked current (`aria-current="page"`). An entry that leads to another site
+  opens in a new tab with `rel="noopener noreferrer"`, and its accessible name
+  says so.
+
+## Content rules
+
+- Content mirrors the latest CV, translated to English, and matches the
+  Angular version.
+- The repository is public. Never put a phone number, street address, date
+  of birth, residence permit or driving licence in source, tests or specs.
+  Location stays at city level.
 
 ## Manual checks
 
