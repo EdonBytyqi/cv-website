@@ -8,6 +8,9 @@ export interface TechStackItem {
   label: string;
   url: string;
   isActive: boolean;
+  /** Accessible name that says where the link goes */
+  description: string;
+  opensInNewTab: boolean;
 }
 
 export interface SocialLink {

@@ -51,6 +51,26 @@ describe('SiteHeader', () => {
     expect(document.activeElement).toBe(menuButton);
   });
 
+  it('[AC-003-10] has no localhost stack links and labels where each one goes', () => {
+    const links = [...header.querySelectorAll<HTMLAnchorElement>('.stack-link')];
+    expect(links.length).toBeGreaterThan(0);
+
+    for (const link of links) {
+      expect(link.getAttribute('href')).not.toMatch(/localhost|127\.0\.0\.1/);
+      expect(link.getAttribute('aria-label')).toBeTruthy();
+    }
+
+    const angular = links.find((link) => link.textContent?.trim() === 'Angular')!;
+    expect(angular.getAttribute('aria-current')).toBe('page');
+    expect(angular.hasAttribute('target')).toBe(false);
+
+    for (const external of links.filter((link) => link.getAttribute('href')!.startsWith('http'))) {
+      expect(external.getAttribute('target')).toBe('_blank');
+      expect(external.getAttribute('rel')).toBe('noopener noreferrer');
+      expect(external.getAttribute('aria-label')).toContain('opens in a new tab');
+    }
+  });
+
   it('[AC-003-04] closes when a navigation link is chosen', async () => {
     await openMenu();
 

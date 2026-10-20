@@ -171,8 +171,15 @@ export class CvService {
         { label: 'CONTACT', href: '#contact', isActive: false }
       ],
       techStackItems: [
-        { label: '.NET', url: 'http://localhost:5000', isActive: false },
-        { label: 'Angular', url: 'http://localhost:4202', isActive: true }
+        // The .NET site isn't hosted yet, so link to its source. Swap in its URL once it is deployed.
+        {
+          label: '.NET',
+          url: 'https://github.com/EdonBytyqi/cv-website/tree/main/dotnet-cv',
+          isActive: false,
+          description: '.NET version: source code on GitHub (opens in a new tab)',
+          opensInNewTab: true
+        },
+        { label: 'Angular', url: './', isActive: true, description: 'Angular version of this CV (this page)', opensInNewTab: false }
       ],
       socialLinks: [
         { label: 'LinkedIn', url: 'https://linkedin.com/in/edon-bytyqi', icon: 'in' },
