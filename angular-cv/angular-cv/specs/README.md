@@ -43,4 +43,4 @@ code. Never delete a criterion just to make the check pass.
 | --- | --- |
 | [001 CV content](001-cv-content/spec.md) | Implemented |
 | [002 Accessibility](002-accessibility/spec.md) | Implemented |
-| [003 Notebook redesign](003-notebook-redesign/spec.md) | Draft |
+| [003 Notebook redesign](003-notebook-redesign/spec.md) | Implemented |
