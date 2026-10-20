@@ -1,5 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Color palette: eggshell background with a deep teal accent.
+   All text/accent pairs meet WCAG AA contrast on the backgrounds below. */
+:root {
+  --color-bg: #f0ead6;          /* eggshell */
+  --color-surface: #f7f3e6;     /* cards */
+  --color-surface-alt: #e8e0c8; /* alternating sections */
+  --color-sidebar: #e6ddc4;
+  --color-text: #2b2a26;
+  --color-text-muted: #5c574c;
+  --color-accent: #1f5f5b;      /* deep teal */
+  --color-accent-strong: #174845;
+  --color-accent-rgb: 31, 95, 91;
+  --color-on-accent: #f0ead6;
+  --color-border: rgba(43, 42, 38, 0.12);
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -7,7 +23,7 @@ html {
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #0a0909;
-  color: #ffffff;
+  background-color: var(--color-bg);
+  color: var(--color-text);
   overflow-x: hidden;
 }

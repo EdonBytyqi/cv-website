@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { CvData } from '../models/cv-data.model';
 import { AboutMe } from '../models/about-me.model';
 import { Experience } from '../models/experience.model';
@@ -11,22 +11,15 @@ import { SidebarData } from '../models/sidebar.model';
   providedIn: 'root'
 })
 export class CvService {
-  private aboutMeSignal = signal<AboutMe>(this.createAboutMe());
-  private experiencesSignal = signal<Experience[]>(this.createExperiences());
-  private educationSignal = signal<Education[]>(this.createEducation());
-  private skillCategoriesSignal = signal<SkillCategory[]>(this.createSkillCategories());
-  private contactSignal = signal<Contact>(this.createContact());
-  private sidebarSignal = signal<SidebarData>(this.createSidebar());
-
-  // Public computed signal for complete CV data
-  cvData = computed<CvData>(() => ({
-    aboutMe: this.aboutMeSignal(),
-    experiences: this.experiencesSignal(),
-    education: this.educationSignal(),
-    skillCategories: this.skillCategoriesSignal(),
-    contact: this.contactSignal(),
-    sidebar: this.sidebarSignal()
-  }));
+  // The CV content is static, so a single read-only signal is enough
+  readonly cvData = signal<CvData>({
+    aboutMe: this.createAboutMe(),
+    experiences: this.createExperiences(),
+    education: this.createEducation(),
+    skillCategories: this.createSkillCategories(),
+    contact: this.createContact(),
+    sidebar: this.createSidebar()
+  }).asReadonly();
 
   private createAboutMe(): AboutMe {
     return {
