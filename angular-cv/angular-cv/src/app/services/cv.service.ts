@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Service, signal } from '@angular/core';
 import { CvData } from '../models/cv-data.model';
 import { AboutMe } from '../models/about-me.model';
 import { Experience } from '../models/experience.model';
@@ -7,9 +7,7 @@ import { SkillCategory } from '../models/skill.model';
 import { Contact } from '../models/contact.model';
 import { SidebarData } from '../models/sidebar.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class CvService {
   // The CV content is static, so a single read-only signal is enough
   readonly cvData = signal<CvData>({
