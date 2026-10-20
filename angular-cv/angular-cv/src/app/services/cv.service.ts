@@ -25,7 +25,7 @@ export class CvService {
       fullName: 'Edon Bytyqi',
       title: 'Software Developer',
       bio: 'Experienced software developer specializing in Avaloq, SAP, and .NET development. Passionate about creating efficient and scalable solutions.',
-      profileImageUrl: '/assets/images/profile.jpg',
+      profileImageUrl: 'assets/images/profile.jpg',
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -162,7 +162,7 @@ export class CvService {
   private createSidebar(): SidebarData {
     return {
       name: 'EDON BYTYQI',
-      profileImageUrl: '/assets/images/profile.jpg',
+      profileImageUrl: 'assets/images/profile.jpg',
       navigationItems: [
         { label: 'HOME', href: '#home', isActive: true },
         { label: 'ABOUT', href: '#about', isActive: false },
