@@ -1,22 +1,21 @@
 import { Component, computed, inject } from '@angular/core';
-import { DatePipe, NgOptimizedImage } from '@angular/common';
 import { CvService } from './services/cv.service';
+import { SiteHeader } from './layout/site-header/site-header';
+import { SiteFooter } from './layout/site-footer/site-footer';
+import { Hero } from './sections/hero/hero';
+import { About } from './sections/about/about';
+import { Experience } from './sections/experience/experience';
+import { Education } from './sections/education/education';
+import { Skills } from './sections/skills/skills';
+import { Contact } from './sections/contact/contact';
 
 @Component({
   selector: 'app-root',
-  imports: [DatePipe, NgOptimizedImage],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  imports: [SiteHeader, SiteFooter, Hero, About, Experience, Education, Skills, Contact],
+  templateUrl: './app.html'
 })
 export class App {
-  private readonly cvService = inject(CvService);
+  protected readonly cvData = inject(CvService).cvData;
 
-  protected readonly cvData = this.cvService.cvData;
-
-  private readonly nameParts = computed(() => this.cvData().aboutMe.fullName.split(' '));
-  protected readonly firstName = computed(() => this.nameParts()[0]);
-  protected readonly lastName = computed(() => this.nameParts().slice(1).join(' '));
-
-  protected readonly phoneHref = computed(() => 'tel:' + this.cvData().contact.phone.replace(/\s/g, ''));
-  protected readonly addressLines = computed(() => this.cvData().contact.fullAddress?.split('\n') ?? []);
+  protected readonly currentJob = computed(() => this.cvData().experiences.find((job) => job.isCurrentJob));
 }

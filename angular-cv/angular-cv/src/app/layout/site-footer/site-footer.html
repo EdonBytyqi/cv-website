@@ -1,0 +1,14 @@
+<footer class="site-footer">
+  <div class="inner">
+    <p class="signature"><span class="hand">thanks for reading!</span> {{ name() }} · built with Angular</p>
+    <ul class="links">
+      @for (link of socialLinks(); track link.url) {
+        <li>
+          <a [href]="link.url" target="_blank" rel="noopener noreferrer">
+            {{ link.label }} <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+</footer>

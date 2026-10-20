@@ -87,6 +87,16 @@ ol {
   border-radius: 2px;
 }
 
+/* Hide visually but keep available to screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* Skip link */
 .skip-link {
   position: fixed;
@@ -205,12 +215,13 @@ ol {
 }
 
 /* Scroll reveal (see Reveal directive). Content stays visible until JS opts in. */
+/* Negative insets keep hard shadows and tape strips outside the box visible */
 .reveal-pending {
-  clip-path: inset(0 0 100% 0);
+  clip-path: inset(0 -2rem 100% -2rem);
 }
 
 .reveal-visible {
-  clip-path: inset(0 0 0 0);
+  clip-path: inset(-2rem);
   transition: clip-path 600ms var(--ease-in-out);
   transition-delay: var(--reveal-delay, 0ms);
 }

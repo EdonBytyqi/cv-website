@@ -1,0 +1,22 @@
+<section id="education" class="section" aria-labelledby="education-heading">
+  <div class="section-inner">
+    <span class="section-label">03 — Education</span>
+    <h2 id="education-heading" class="section-title">Education &amp; certifications</h2>
+
+    <ul class="cards">
+      @for (entry of entries(); track entry.id) {
+        <li [appReveal]="$index * 60">
+          <article class="card index-card">
+            <span class="tape" aria-hidden="true"></span>
+            <p class="years">{{ entry.years }}</p>
+            <h3 class="degree">{{ entry.degree }}</h3>
+            <p class="institution">{{ entry.institutionLine }}</p>
+            @if (entry.results) {
+              <p class="results">{{ entry.results }}</p>
+            }
+          </article>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
