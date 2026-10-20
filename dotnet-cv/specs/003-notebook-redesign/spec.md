@@ -1,6 +1,6 @@
 # 003 — Notebook redesign
 
-Status: Draft
+Status: Implemented
 
 ## Problem
 

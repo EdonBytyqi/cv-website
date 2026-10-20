@@ -2,137 +2,167 @@
 @using System.Globalization
 @{
     ViewData["Title"] = "Edon Bytyqi - CV";
+    var contact = Model.Contact;
 }
 
-<section id="home" class="hero-section">
-    <div class="hero-content">
-        <div class="hero-image">
-            <div class="profile-circle"></div>
-        </div>
-        <h1 class="hero-name">@Model.AboutMe.FirstName <span class="highlight">@Model.AboutMe.LastName</span></h1>
-        <p class="hero-subtitle">@Model.AboutMe.Title</p>
-        <div class="tech-badge-hero">
-            <span class="badge-dot"></span>
-            Built with C# .NET
-        </div>
-    </div>
-    <div class="scroll-indicator">
-        <span>↓</span>
-    </div>
-</section>
+<section id="home" class="hero" aria-labelledby="hero-heading">
+    <div class="hero-inner">
+        <div class="intro">
+            <span class="section-label">Curriculum vitae</span>
+            <h1 id="hero-heading" class="name">
+                @Model.AboutMe.FirstName
+                <span class="marker">@Model.AboutMe.LastName</span>
+            </h1>
+            <p class="title">@Model.AboutMe.Title</p>
 
-<section id="about" class="content-section">
-    <div class="container-custom">
-        <h2 class="section-title">ABOUT ME</h2>
-        <div class="section-content">
-            <p>@Model.AboutMe.Bio</p>
-        </div>
-    </div>
-</section>
+            <div class="actions">
+                <a class="button button--primary" href="#contact">Get in touch</a>
+                <a class="button" href="#experience">See my work</a>
+            </div>
 
-<section id="experience" class="content-section alt-bg">
-    <div class="container-custom">
-        <h2 class="section-title">EXPERIENCE</h2>
-        <div class="timeline">
-            @foreach (var exp in Model.Experiences)
+            <p class="built-with"><span class="dot" aria-hidden="true"></span> Built with ASP.NET Core 10</p>
+        </div>
+
+        <figure class="polaroid">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="@Model.AboutMe.ProfileImageUrl" width="300" height="400" fetchpriority="high"
+                alt="@Model.AboutMe.FullName, portrait photo" />
+            @if (Model.CurrentRoleNote is { } note)
             {
-                <div class="timeline-item">
-                    <div class="timeline-date">
-                        @exp.StartDate.ToString("MMM yyyy", CultureInfo.InvariantCulture) - @(exp.IsCurrentJob ? "Present" : exp.EndDate?.ToString("MMM yyyy", CultureInfo.InvariantCulture))
-                    </div>
-                    <div class="timeline-content">
-                        <h3>@exp.JobTitle</h3>
-                        <h4>@exp.Company@(string.IsNullOrEmpty(exp.Location) ? "" : ", " + exp.Location)</h4>
-                        @if (exp.Responsibilities.Any())
+                <figcaption class="hand">@note</figcaption>
+            }
+        </figure>
+    </div>
+</section>
+
+<section id="about" class="section" aria-labelledby="about-heading">
+    <div class="section-inner about">
+        <div>
+            <span class="section-label">01 — About</span>
+            <h2 id="about-heading" class="section-title">About me</h2>
+        </div>
+        <div data-reveal="0">
+            <p class="lead">@Model.AboutMe.Bio</p>
+            <p class="hand note">based in @contact.Location</p>
+        </div>
+    </div>
+</section>
+
+<section id="experience" class="section" aria-labelledby="experience-heading">
+    <div class="section-inner">
+        <span class="section-label">02 — Experience</span>
+        <h2 id="experience-heading" class="section-title">Where I've worked</h2>
+
+        <ol class="timeline">
+            @for (var i = 0; i < Model.Experiences.Count; i++)
+            {
+                var exp = Model.Experiences[i];
+                <li data-reveal="@(i * 60)">
+                    <article class="entry-grid">
+                        <span class="year">@exp.StartDate.Year</span>
+                        <div class="card">
+                            <time class="range" datetime="@exp.StartDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)">
+                                @exp.StartDate.ToString("MMM yyyy", CultureInfo.InvariantCulture) - @(exp.IsCurrentJob ? "Present" : exp.EndDate?.ToString("MMM yyyy", CultureInfo.InvariantCulture))
+                            </time>
+                            <h3 class="role">@exp.JobTitle</h3>
+                            <p class="company">@exp.Company@(string.IsNullOrEmpty(exp.Location) ? "" : ", " + exp.Location)</p>
+                            @if (exp.Responsibilities.Count > 0)
+                            {
+                                <ul class="duties">
+                                    @foreach (var responsibility in exp.Responsibilities)
+                                    {
+                                        <li>@responsibility</li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    </article>
+                </li>
+            }
+        </ol>
+    </div>
+</section>
+
+<section id="education" class="section" aria-labelledby="education-heading">
+    <div class="section-inner">
+        <span class="section-label">03 — Education</span>
+        <h2 id="education-heading" class="section-title">Education &amp; certifications</h2>
+
+        <ul class="index-cards">
+            @for (var i = 0; i < Model.Education.Count; i++)
+            {
+                var edu = Model.Education[i];
+                <li data-reveal="@(i * 60)">
+                    <article class="card index-card">
+                        <span class="tape" aria-hidden="true"></span>
+                        <p class="years">@edu.YearRange</p>
+                        <h3 class="degree">@edu.Degree</h3>
+                        <p class="institution">@edu.Institution@(string.IsNullOrEmpty(edu.Location) ? "" : ", " + edu.Location)@(string.IsNullOrEmpty(edu.Grade) ? "" : $" ({edu.Grade})")</p>
+                        @if (!string.IsNullOrEmpty(edu.Description))
                         {
-                            <ul>
-                                @foreach (var responsibility in exp.Responsibilities)
-                                {
-                                    <li>@responsibility</li>
-                                }
-                            </ul>
+                            <p class="description">@edu.Description</p>
                         }
-                    </div>
-                </div>
+                    </article>
+                </li>
             }
-        </div>
+        </ul>
     </div>
 </section>
 
-<section id="education" class="content-section">
-    <div class="container-custom">
-        <h2 class="section-title">EDUCATION</h2>
-        <div class="education-grid">
-            @foreach (var edu in Model.Education)
-            {
-                <div class="education-card">
-                    <div class="edu-year">
-                        @edu.YearRange
-                    </div>
-                    <h3>@edu.Degree</h3>
-                    <p>@edu.Institution@(string.IsNullOrEmpty(edu.Location) ? "" : ", " + edu.Location)</p>
-                    @if (!string.IsNullOrEmpty(edu.Grade))
-                    {
-                        <p class="grade">@edu.Grade</p>
-                    }
-                    @if (!string.IsNullOrEmpty(edu.Description))
-                    {
-                        <p>@edu.Description</p>
-                    }
-                </div>
-            }
-        </div>
-    </div>
-</section>
+<section id="skills" class="section" aria-labelledby="skills-heading">
+    <div class="section-inner">
+        <span class="section-label">04 — Skills</span>
+        <h2 id="skills-heading" class="section-title">What I work with</h2>
 
-<section id="skills" class="content-section alt-bg">
-    <div class="container-custom">
-        <h2 class="section-title">TECHNICAL SKILLS</h2>
-        <div class="skills-grid">
-            @foreach (var category in Model.SkillCategories)
+        <div class="skill-groups">
+            @for (var i = 0; i < Model.SkillCategories.Count; i++)
             {
-                <div class="skill-category">
-                    <h3>@category.CategoryName</h3>
-                    <div class="skill-tags">
+                var category = Model.SkillCategories[i];
+                <article class="skill-group" data-reveal="@(i * 60)">
+                    <h3 class="group-title">@category.CategoryName</h3>
+                    <ul class="stickers">
                         @foreach (var skill in category.Skills)
                         {
-                            <span class="skill-tag">@skill</span>
+                            <li class="sticker">@skill</li>
                         }
-                    </div>
-                </div>
+                    </ul>
+                </article>
             }
         </div>
     </div>
 </section>
 
-<section id="contact" class="content-section">
-    <div class="container-custom">
-        <h2 class="section-title">CONTACT</h2>
-        <div class="contact-grid">
-            <div class="contact-item">
-                <div class="contact-icon">✉</div>
-                <div class="contact-info">
-                    <h4>Email</h4>
-                    <p><a href="mailto:@Model.Contact.Email">@Model.Contact.Email</a></p>
-                </div>
+<section id="contact" class="section" aria-labelledby="contact-heading">
+    <div class="section-inner">
+        <span class="section-label">05 — Contact</span>
+        <h2 id="contact-heading" class="section-title">Let's talk</h2>
+
+        <div class="note-paper" data-reveal="0">
+            <p class="hand">Two ways in:</p>
+            <div class="ways">
+                <a class="button button--primary" href="mailto:@contact.Email">Email me</a>
+                <a class="button" href="@contact.LinkedInUrl" target="_blank" rel="noopener noreferrer">
+                    Connect on LinkedIn <span class="visually-hidden">(opens in a new tab)</span>
+                </a>
             </div>
-            @if (!string.IsNullOrWhiteSpace(Model.Contact.Phone))
-            {
-                <div class="contact-item">
-                    <div class="contact-icon">📱</div>
-                    <div class="contact-info">
-                        <h4>Phone</h4>
-                        <p>@Model.Contact.Phone</p>
+
+            <dl class="details">
+                <div>
+                    <dt>Email</dt>
+                    <dd><a href="mailto:@contact.Email">@contact.Email</a></dd>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(contact.Phone))
+                {
+                    <div>
+                        <dt>Phone</dt>
+                        <dd>@contact.Phone</dd>
                     </div>
+                }
+                <div>
+                    <dt>Location</dt>
+                    <dd>@contact.Location</dd>
                 </div>
-            }
-            <div class="contact-item">
-                <div class="contact-icon">📍</div>
-                <div class="contact-info">
-                    <h4>Location</h4>
-                    <p>@Model.Contact.Location</p>
-                </div>
-            </div>
+            </dl>
         </div>
     </div>
 </section>

@@ -1,7 +1,8 @@
 @using DotNetCV.ViewModels
 @{
     // Only the CV page has a sidebar model, so the error page never depends on the CV service
-    var sidebar = (Model as CvViewModel)?.Sidebar;
+    var cv = Model as CvViewModel;
+    var site = cv?.Sidebar;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -12,49 +13,70 @@
     <title>@ViewData["Title"] - Edon Bytyqi</title>
     <meta name="description"
         content="Edon Bytyqi – software developer with 6+ years in enterprise IT: SAP, Avaloq, C#/.NET and production GenAI systems (RAG, agents, MCP)">
-    <script type="importmap"></script>
+    <link rel="preload" href="/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 
 <body>
-    @if (sidebar is not null)
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    @if (site is not null)
     {
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo"></div>
-                <h3>@sidebar.Name</h3>
+        <header class="site-header">
+            <div class="header-inner">
+                <a class="brand" href="#home">
+                    <span class="monogram" aria-hidden="true">EB</span>
+                    <span class="brand-name">@site.Name</span>
+                </a>
+
+                <button type="button" class="menu-toggle" aria-controls="site-nav-list" aria-expanded="false">Menu</button>
+
+                <nav class="site-nav" aria-label="Main navigation">
+                    <ul id="site-nav-list" class="nav-list">
+                        @foreach (var item in site.NavigationItems)
+                        {
+                            <li><a class="nav-link" href="@item.Href">@item.Label</a></li>
+                        }
+                        <li class="stack-switch">
+                            <span class="stack-label">Stack</span>
+                            @foreach (var tech in site.TechStackItems)
+                            {
+                                <a href="@tech.Url" class="stack-link @(tech.IsActive ? "current" : null)"
+                                    aria-label="@tech.Description"
+                                    aria-current="@(tech.IsActive ? "page" : null)"
+                                    target="@(tech.OpensInNewTab ? "_blank" : null)"
+                                    rel="@(tech.OpensInNewTab ? "noopener noreferrer" : null)">@tech.Label</a>
+                            }
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <nav class="sidebar-nav" aria-label="Main navigation">
-                @foreach (var item in sidebar.NavigationItems)
-                {
-                    <a href="@item.Href" class="nav-item">@item.Label</a>
-                }
-            </nav>
-            <div class="tech-switch">
-                <div class="switch-label">TECH STACK</div>
-                @foreach (var tech in sidebar.TechStackItems)
-                {
-                    <a href="@tech.Url" class="tech-btn @(tech.IsActive ? "active" : null)"
-                        aria-label="@tech.Description"
-                        aria-current="@(tech.IsActive ? "page" : null)"
-                        target="@(tech.OpensInNewTab ? "_blank" : null)"
-                        rel="@(tech.OpensInNewTab ? "noopener noreferrer" : null)">@tech.Label</a>
-                }
-            </div>
-            <div class="sidebar-footer">
-                <div class="social-links">
-                    @foreach (var link in sidebar.SocialLinks)
-                    {
-                        <a href="@link.Url" class="social-icon" target="_blank" rel="noopener noreferrer"
-                            aria-label="@link.Label (opens in a new tab)">@link.Icon</a>
-                    }
-                </div>
-            </div>
-        </div>
+        </header>
     }
-    <div class="main-content">
+
+    <main id="main-content" tabindex="-1">
         @RenderBody()
-    </div>
+    </main>
+
+    @if (cv is not null && site is not null)
+    {
+        <footer class="site-footer">
+            <div class="footer-inner">
+                <p class="signature"><span class="hand">thanks for reading!</span> @cv.AboutMe.FullName · built with ASP.NET Core</p>
+                <ul class="footer-links">
+                    @foreach (var link in site.SocialLinks)
+                    {
+                        <li>
+                            <a href="@link.Url" target="_blank" rel="noopener noreferrer">
+                                @link.Label <span class="visually-hidden">(opens in a new tab)</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </footer>
+    }
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
