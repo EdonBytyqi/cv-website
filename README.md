@@ -114,3 +114,8 @@ Vitest.
 **.NET:** ASP.NET Core 10 MVC with Razor views, a read-only JSON API at
 `/api/cvapi` (OpenAPI document and Swagger UI at `/api/docs` in
 Development), xUnit.
+
+## Working with AI
+
+How I use AI assistants on this project, safely and responsibly: [AI_GUIDE.md](AI_GUIDE.md).
+In short: *AI delivers the code, I take the accountability.*
